@@ -11,7 +11,7 @@ import { join } from 'path';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [config]
+      load: [config],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -21,16 +21,16 @@ import { join } from 'path';
       definitions: {
         path: join(process.cwd(), 'src/graphql/graphql.ts'),
         outputAs: 'class',
-      }
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        ...configService.get('database')
+        ...configService.get('database'),
       }),
       inject: [ConfigService],
     }),
-    UserModule
+    UserModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
