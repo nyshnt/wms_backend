@@ -1,0 +1,42 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+type Query {
+  user(id: ID!): User!
+  users: [User!]!
+}
+
+type User {
+  created_at: DateTime!
+  deleted_at: DateTime
+  email: String!
+  id: ID!
+  is_active: Boolean!
+  last_login: DateTime
+  name: String!
+  role: UserRole!
+  updated_at: DateTime!
+}
+
+"""User role enumeration"""
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
