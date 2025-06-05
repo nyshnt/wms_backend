@@ -1,31 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { UserRepository } from './user.repository';
 import { CreateUserInput } from './dto/create-user.input';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        private userRepository: UserRepository,
     ) {}
 
     async findAll(): Promise<User[]> {
-        return this.userRepository.find();
+        return this.userRepository.findAll();
     }
 
     async findOne(id: string): Promise<User> {
-        return this.userRepository.findOneOrFail({ where: { id } });
+        return this.userRepository.findOneById(id);
     }
 
     async findByEmail(email: string): Promise<User> {
-        return this.userRepository.findOne({ where: { email } });
+        return this.userRepository.findByEmail(email);
     }
 
     async create(createUserInput: CreateUserInput): Promise<User> {
-        const user = this.userRepository.create(createUserInput);
-        return await this.userRepository.save(user);
+        return await this.userRepository.createUser(createUserInput);
     }
 
     // Add more service methods as needed
