@@ -1,6 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
+import { Warehouse } from './warehouse.entity';
 import { PalletDetail } from './pallet_detail.entity';
 
 @ObjectType('InventoryLoad')
@@ -8,8 +9,17 @@ import { PalletDetail } from './pallet_detail.entity';
 @Index('IDX_inventory_load_load_number', ['load_number'], { unique: true })
 export class InventoryLoad extends BaseEntity {
     @Field(() => String, { description: 'Unique identifier for the inventory load.' })
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn({ name: 'load_number' })
     load_number: string;
+
+    @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
+    @ManyToOne(() => Warehouse)
+    @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
+    warehouse_id: string;
+
+    @Field(() => String, { description: 'Storage location for the load.' })
+    @Column({ name: 'storage_location', type: 'varchar', length: 255, nullable: true })
+    storage_location: string;
 
     @Field(() => PalletDetail, { description: 'Foreign key referencing the Pallet_Detail table.' })
     @ManyToOne(() => PalletDetail)

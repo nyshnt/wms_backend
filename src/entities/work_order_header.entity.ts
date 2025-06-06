@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
 import { CustomsConsignment } from './customs_consignment.entity';
 
@@ -10,21 +10,57 @@ import { CustomsConsignment } from './customs_consignment.entity';
 @Index('IDX_work_order_client_id', ['client_id'], { unique: true })
 @Index('IDX_work_order_warehouse_id', ['warehouse_id'], { unique: true })
 export class WorkOrderHeader extends BaseEntity {
-    @Field(() => String, { description: 'Work order number.' })
-    @PrimaryGeneratedColumn('uuid')
+    @Field(() => String, { description: 'Unique identifier for the work order.' })
+    @PrimaryColumn({ name: 'work_order_number' })
     work_order_number: string;
 
-    @Field(() => String, { description: 'Work order revision.' })
-    @Column({ type: 'varchar', length: 255, nullable: false })
+    @Field(() => String, { description: 'Revision of the work order.' })
+    @PrimaryColumn({ name: 'work_order_revision' })
     work_order_revision: string;
 
     @Field(() => String, { description: 'Client ID.' })
-    @Column({ type: 'varchar', length: 255, nullable: false })
+    @PrimaryColumn({ name: 'client_id' })
     client_id: string;
 
     @Field(() => String, { description: 'Warehouse ID.' })
-    @Column({ type: 'varchar', length: 255, nullable: false })
+    @PrimaryColumn({ name: 'warehouse_id' })
     warehouse_id: string;
+
+    @Field(() => Boolean, { description: 'Exclusion flag.' })
+    @Column({ type: 'boolean', nullable: true })
+    exclusion_flag: boolean;
+
+    @Field(() => Boolean, { description: 'Start flag.' })
+    @Column({ type: 'boolean', nullable: true })
+    start_flag: boolean;
+
+    @Field(() => String, { description: 'Production line.' })
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    production_line: string;
+
+    @Field(() => Date, { description: 'Scheduled begin date.' })
+    @Column({ type: 'date', nullable: true })
+    schedule_begin_date: Date;
+
+    @Field(() => Boolean, { description: 'Auto release pick flag.' })
+    @Column({ type: 'boolean', nullable: true })
+    auto_release_pick_flag: boolean;
+
+    @Field(() => String, { description: 'Auto release pick time.' })
+    @Column({ type: 'time', nullable: true })
+    auto_release_pick_time: string;
+
+    @Field(() => String, { description: 'Goal time.' })
+    @Column({ type: 'time', nullable: true })
+    goal_time: string;
+
+    @Field(() => String, { description: 'Duration time.' })
+    @Column({ type: 'time', nullable: true })
+    duration_time: string;
+
+    @Field(() => Number, { description: 'Planning sequence.' })
+    @Column({ type: 'int', nullable: true })
+    plan_sequence: number;
 
     @Field(() => CustomsConsignment, { description: 'Foreign key referencing Customs_Consignment.' })
     @ManyToOne(() => CustomsConsignment)

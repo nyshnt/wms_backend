@@ -1,15 +1,16 @@
+import { Entity, PrimaryColumn } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
 import { OrderLine } from './order_line.entity';
-import { OrderHeader } from './order_header.entity';
+import { OrderHeader } from './orderheader.entity';
 
 @ObjectType('ShipmentLine')
 @Entity('shipment_line')
 @Index('IDX_shipment_line_shipment_line_id', ['shipment_line_id'], { unique: true })
 export class ShipmentLine extends BaseEntity {
     @Field(() => String, { description: 'Unique identifier for the shipment line.' })
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn({ name: 'shipment_line_id' })
     shipment_line_id: string;
 
     @Field(() => OrderLine, { description: 'Foreign key referencing Order_Line table.' })

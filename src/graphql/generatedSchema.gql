@@ -2,10 +2,116 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AreaMaster {
+  """Unique identifier for the area code."""
+  area_code: String!
+
+  """Foreign key referencing the Building_Master table."""
+  building: BuildingMaster!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+}
+
+type AssetMaster {
+  asset_id: String!
+  asset_number: String!
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+  warehouse_id: Warehouse!
+}
+
+type BuildingMaster {
+  """Unique identifier for the building."""
+  building_id: String!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+}
+
+type CarrierMove {
+  """Unique identifier for the carrier move."""
+  carrier_move_id: String!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+}
+
+type Client {
+  client_id: String!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+}
+
+type CommandConfiguration {
+  """Unique identifier for the command configuration."""
+  command_configuration_id: String!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+}
+
+type ContainerZone {
+  """Unique identifier for the container zone."""
+  container_zone_id: String!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+}
+
 input CreateUserInput {
   email: String!
   name: String!
   password: String!
+}
+
+type CustomerMaster {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+
+  """Unique identifier for the customer."""
+  customer_number: String!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+}
+
+type CustomsConsignment {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+
+  """Unique identifier for the customs consignment."""
+  customs_consignment_id: String!
+  deleted_at: DateTime
+  id: ID!
+
+  """Supplier number."""
+  supplier_number: String!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+
+  """Flag indicating if there's a work order."""
+  work_order_flag: Boolean!
 }
 
 """
@@ -13,13 +119,443 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Distribution {
+  """Primary and Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+
+  """Unique identifier for the distribution."""
+  distribution_id: String!
+
+  """Foreign key referencing Distribution_Type."""
+  distribution_type: DistributionType!
+  id: ID!
+
+  """Invoice line number."""
+  invoice_line_number: String!
+
+  """Invoice number."""
+  invoice_number: String!
+
+  """Invoice subline number."""
+  invoice_subline_number: String!
+
+  """Stocking customer identifier."""
+  stocking_customer: String!
+
+  """Supplier number."""
+  supplier_number: String!
+
+  """Tracking number."""
+  tracking_number: String!
+  updated_at: DateTime!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type DistributionType {
+  created_at: DateTime!
+  deleted_at: DateTime
+
+  """Foreign key referencing Rule_Set_Command."""
+  distribution_rule_set: RuleSetCommand!
+
+  """Unique identifier for the distribution type."""
+  distribution_type: String!
+  id: ID!
+
+  """Foreign key referencing Rule_Set_Command for overage rules."""
+  overage_rule_set: RuleSetCommand!
+  updated_at: DateTime!
+}
+
+type InventoryDetail {
+  """Primary and Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+
+  """Foreign key referencing Customs_Consignment."""
+  customs_consignment_id: CustomsConsignment!
+  deleted_at: DateTime
+
+  """Device code."""
+  device_code: String!
+
+  """Foreign key referencing the Distribution table."""
+  distribution_id: Distribution!
+  id: ID!
+
+  """Unique identifier for the inventory detail."""
+  inventory_detail_number: String!
+
+  """Invoice line number."""
+  invoice_line_number: String!
+
+  """Invoice number."""
+  invoice_number: String!
+
+  """Invoice subline number."""
+  invoice_subline_number: String!
+
+  """Primary and Foreign key referencing Inventory_Load."""
+  load_number: InventoryLoad!
+
+  """Order line number."""
+  order_line_number: Float!
+
+  """Foreign key referencing the Order_Header table."""
+  order_number: OrderHeader!
+
+  """Order subline number."""
+  order_subline_number: Float!
+
+  """Foreign key referencing Part_Master."""
+  part_client_id: PartMaster!
+
+  """Foreign key referencing Part_Master."""
+  part_number: PartMaster!
+
+  """Foreign key referencing the Shipment_Line table."""
+  shipment_line_id: ShipmentLine!
+
+  """Primary and Foreign key referencing Inventory_Sub_Location."""
+  sub_number: InventorySubLocation!
+
+  """Supplier number."""
+  supplier_number: String!
+
+  """Tracking key for the inventory detail."""
+  tracking_key: String!
+
+  """Tracking number."""
+  tracking_number: String!
+  updated_at: DateTime!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type InventoryLoad {
+  created_at: DateTime!
+  deleted_at: DateTime
+
+  """Device code."""
+  device_code: String!
+
+  """Dynamic name associated with the load."""
+  dynamic_name: String!
+  id: ID!
+
+  """Unique identifier for the inventory load."""
+  load_number: String!
+
+  """Foreign key referencing the Pallet_Detail table."""
+  pallet_id: PalletDetail!
+
+  """Storage location for the load."""
+  storage_location: String!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type InventorySubLocation {
+  """Foreign key referencing Inventory_Load."""
+  load_number: InventoryLoad!
+
+  """Unique identifier for the sub-location."""
+  sub_number: String!
+}
+
+type LocationMaster {
+  """Foreign key referencing Area_Master."""
+  area: AreaMaster!
+
+  """Primary and Foreign key referencing Container_Zone."""
+  containerZone: ContainerZone!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Location access details."""
+  locationAccess: String!
+
+  """Primary and Foreign key referencing Location_Type."""
+  locationType: LocationType!
+
+  """Primary and Foreign key referencing Movement_Zone."""
+  movementZone: MovementZone!
+
+  """Primary and Foreign key referencing Pick_Zone."""
+  pickZone: PickZone!
+
+  """Storage location."""
+  storageLocation: String!
+
+  """Primary and Foreign key referencing Storage_Zone."""
+  storageZone: StorageZone!
+
+  """Storage location."""
+  storage_location: String!
+  updated_at: DateTime!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+
+  """Primary and Foreign key referencing Work_Zone_Master."""
+  workZone: WorkZoneMaster!
+}
+
+type LocationType {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the location type."""
+  location_type_id: String!
+  updated_at: DateTime!
+}
+
+type MovementZone {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the movement zone."""
+  movement_zone_id: String!
+  updated_at: DateTime!
+}
+
 type Mutation {
   createUser(input: CreateUserInput!): User!
+}
+
+type NoteDetail {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the note detail."""
+  note_id: String!
+
+  """The actual text of the note."""
+  note_text: String!
+
+  """Foreign key referencing the Note_Type table."""
+  note_type_id: NoteType!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type NoteType {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Description of the note type."""
+  note_type_description: String!
+
+  """Unique identifier for the note type."""
+  note_type_id: String!
+  updated_at: DateTime!
+}
+
+type OrderHeader {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the order header."""
+  order_number: String!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type OrderLine {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+
+  """Foreign key referencing the Distribution table."""
+  distribution_id: Distribution!
+  id: ID!
+
+  """Line number within the order."""
+  order_line_number: String!
+
+  """Foreign key referencing the Order_Header table."""
+  order_number: OrderHeader!
+
+  """Subline number within the order."""
+  order_subline_number: String!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type PalletDetail {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the pallet."""
+  pallet_id: String!
+  updated_at: DateTime!
+}
+
+type PartMaster {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+
+  """Description of the part."""
+  description: String!
+
+  """Client ID associated with the part."""
+  part_client_id: String!
+
+  """Unique identifier for the part."""
+  part_number: String!
+
+  """Foreign key referencing the SupplierMaster table."""
+  supplier_number: SupplierMaster!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type PickBatch {
+  """Unique identifier for the pick batch."""
+  schedule_batch_id: String!
+}
+
+type PickWorkHeader {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+
+  """Description of the pick work."""
+  description: String!
+
+  """Foreign key referencing Pick_Batch."""
+  schedule_batch_id: PickBatch!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+
+  """Unique identifier for the pick work header."""
+  work_reference: String!
+}
+
+type PickZone {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the pick zone."""
+  pick_zone_id: String!
+  updated_at: DateTime!
 }
 
 type Query {
   user(id: ID!): User!
   users: [User!]!
+}
+
+type RuleSetCommand {
+  """Foreign key referencing Command_Configuration."""
+  command_configuration_id: CommandConfiguration!
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Sequence of the rule within the set."""
+  rule_sequence: Float!
+
+  """Name of the rule set."""
+  rule_set: String!
+  updated_at: DateTime!
+}
+
+type ShipmentHeader {
+  """Activity ID."""
+  activity_id: String!
+
+  """Foreign key referencing the Client table."""
+  client_id: Client!
+  created_at: DateTime!
+  deleted_at: DateTime
+
+  """Device code associated with the shipment."""
+  device_code: String!
+  id: ID!
+
+  """Order number associated with the shipment."""
+  order_number: String!
+
+  """Unique identifier for the shipment header."""
+  shipment_id: String!
+  updated_at: DateTime!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
+type ShipmentLine {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Foreign key referencing Order_Line table."""
+  order_line_number: OrderLine!
+
+  """Foreign key referencing Order_Header table."""
+  order_number: OrderHeader!
+
+  """Foreign key referencing Order_Line table."""
+  order_subline_number: OrderLine!
+
+  """Unique identifier for the shipment line."""
+  shipment_line_id: String!
+  updated_at: DateTime!
+}
+
+type StorageZone {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+
+  """Unique identifier for the storage zone."""
+  storage_zone_id: String!
+  updated_at: DateTime!
+}
+
+type SupplierMaster {
+  """Type of asset."""
+  asset_type: String!
+
+  """Status of receiving."""
+  receiving_status: String!
+
+  """Unique identifier for the supplier."""
+  supplier_number: String!
+
+  """Trust flag."""
+  trust_flag: Boolean!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse_id: String!
 }
 
 type User {
@@ -39,4 +575,54 @@ enum UserRole {
   ADMIN
   MANAGER
   USER
+}
+
+type Warehouse {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+  warehouse_id: String!
+}
+
+type WorkOrderDetail {
+  """Primary and Foreign key referencing the Client table."""
+  client_id: String!
+
+  """Process location."""
+  process_location: String!
+
+  """Segment number."""
+  segment_number: Float!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse_id: String!
+
+  """Line number within the work order."""
+  work_order_line_number: Float!
+
+  """Primary and Foreign key referencing Work_Order_Header."""
+  work_order_number: String!
+
+  """Primary and Foreign key referencing Work_Order_Header."""
+  work_order_revision: String!
+}
+
+type WorkZoneMaster {
+  created_at: DateTime!
+  deleted_at: DateTime
+  id: ID!
+  updated_at: DateTime!
+
+  """Description of the work zone."""
+  workZoneDescription: String!
+
+  """Name of the work zone."""
+  workZoneName: String!
+
+  """Type of the work zone."""
+  workZoneType: String!
+
+  """Unique identifier for the work zone."""
+  work_zone_id: String!
 }

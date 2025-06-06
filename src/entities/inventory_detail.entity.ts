@@ -7,6 +7,9 @@ import { OrderHeader } from './orderheader.entity';
 import { CustomsConsignment } from './customs_consignment.entity';
 import { ShipmentLine } from './shipment_line.entity';
 import { Distribution } from './distribution.entity';
+import { InventoryLoad } from './inventory_load.entity';
+import { InventorySubLocation } from './inventory_sub_location.entity';
+import { PartMaster } from './part_master.entity';
 
 @ObjectType('InventoryDetail')
 @Entity('inventory_detail')
@@ -14,15 +17,37 @@ import { Distribution } from './distribution.entity';
 @Index('IDX_inventory_detail_warehouse_id', ['warehouse_id'], { unique: true })
 @Index('IDX_inventory_detail_client_id', ['client_id'], { unique: true })
 export class InventoryDetail extends BaseEntity {
+    @Field(() => InventoryLoad, { description: 'Primary and Foreign key referencing Inventory_Load.' })
+    @PrimaryColumn({ name: 'load_number' })
+    @ManyToOne(() => InventoryLoad)
+    @JoinColumn({ name: 'load_number', referencedColumnName: 'load_number' })
+    load_number: string;
+
+    @Field(() => String, { description: 'Unique identifier for the inventory detail.' })
+    @PrimaryColumn({ name: 'inventory_detail_number' })
+    inventory_detail_number: string;
+
+    @Field(() => InventorySubLocation, { description: 'Primary and Foreign key referencing Inventory_Sub_Location.' })
+    @PrimaryColumn({ name: 'sub_number' })
+    @ManyToOne(() => InventorySubLocation)
+    @JoinColumn({ name: 'sub_number', referencedColumnName: 'sub_number' })
+    sub_number: string;
+
+    @Field(() => PartMaster, { description: 'Foreign key referencing Part_Master.' })
+    @ManyToOne(() => PartMaster)
+    @JoinColumn({ name: 'part_number', referencedColumnName: 'part_number' })
+    part_number: string;
+
+    @Field(() => PartMaster, { description: 'Foreign key referencing Part_Master.' })
+    @ManyToOne(() => PartMaster)
+    @JoinColumn({ name: 'part_client_id', referencedColumnName: 'part_client_id' })
+    part_client_id: string;
+
     @Field(() => Warehouse, { description: 'Primary and Foreign key referencing the Warehouse table.' })
     @PrimaryColumn({ type: 'uuid' })
     @ManyToOne(() => Warehouse)
     @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
     warehouse_id: Warehouse;
-
-    @Field(() => String, { description: 'Unique identifier for the inventory detail.' })
-    @PrimaryColumn({ type: 'uuid' })
-    inventory_detail_number: string;
 
     @Field(() => Client, { description: 'Primary and Foreign key referencing the Client table.' })
     @PrimaryColumn({ type: 'uuid' })
