@@ -11,6 +11,7 @@ export class BuildingMaster extends BaseEntity {
     building_id: string;
 
     @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
+    @PrimaryColumn({ name: 'warehouse_id' })
     @ManyToOne(() => Warehouse)
     @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
     warehouse: Warehouse;

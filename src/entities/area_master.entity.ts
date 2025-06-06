@@ -12,11 +12,13 @@ export class AreaMaster extends BaseEntity {
     area_code: string;
 
     @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
+    @PrimaryColumn({ name: 'warehouse_id' })
     @ManyToOne(() => Warehouse)
     @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
     warehouse: Warehouse;
 
-    @Field(() => BuildingMaster, { description: 'Foreign key referencing the Building_Master table.' })
+    @Field(() => BuildingMaster, { description: 'Primary and Foreign key referencing Building_Master.' })
+    @PrimaryColumn({ name: 'building_id' })
     @ManyToOne(() => BuildingMaster)
     @JoinColumn({ name: 'building_id', referencedColumnName: 'building_id' })
     building: BuildingMaster;

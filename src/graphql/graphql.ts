@@ -20,6 +20,15 @@ export class CreateUserInput {
     password: string;
 }
 
+export class AddressMaster {
+    address_id: string;
+    city: string;
+    country: string;
+    postal_code: string;
+    state: string;
+    street: string;
+}
+
 export class AreaMaster {
     area_code: string;
     building: BuildingMaster;
@@ -28,6 +37,13 @@ export class AreaMaster {
     id: string;
     updated_at: DateTime;
     warehouse: Warehouse;
+}
+
+export class AssetFeature {
+    description: string;
+    feature_id: string;
+    feature_name: string;
+    serviceAsset: ServiceAsset;
 }
 
 export class AssetMaster {
@@ -39,6 +55,12 @@ export class AssetMaster {
     id: string;
     updated_at: DateTime;
     warehouse_id: Warehouse;
+}
+
+export class AssetType {
+    asset_type: string;
+    feature: AssetFeature;
+    warehouse: Warehouse;
 }
 
 export class BuildingMaster {
@@ -74,6 +96,14 @@ export class CommandConfiguration {
     updated_at: DateTime;
 }
 
+export class ConfirmService {
+    confirm_service_id: string;
+    confirmation_date: DateTime;
+    confirmation_status: boolean;
+    confirmed_user_id: string;
+    service_rate: ServiceRateMaster;
+}
+
 export class ContainerZone {
     container_zone_id: string;
     created_at: DateTime;
@@ -103,6 +133,13 @@ export class CustomsConsignment {
     work_order_flag: boolean;
 }
 
+export class DeviceMaster {
+    device_class: string;
+    device_code: string;
+    device_name: string;
+    warehouse_id: string;
+}
+
 export class Distribution {
     client_id: Client;
     created_at: DateTime;
@@ -130,7 +167,18 @@ export class DistributionType {
     updated_at: DateTime;
 }
 
+export class FTPMaster {
+    FTP_code: string;
+}
+
+export class HoldMaster {
+    hold_number: string;
+    hold_prefix: string;
+    warehouse_id: string;
+}
+
 export class InventoryDetail {
+    FTP_code: FTPMaster;
     client_id: Client;
     created_at: DateTime;
     customs_consignment_id: CustomsConsignment;
@@ -138,6 +186,15 @@ export class InventoryDetail {
     device_code: string;
     distribution_id: Distribution;
     id: string;
+    inventory_attribute_date_1: DateTime;
+    inventory_attribute_date_2: DateTime;
+    inventory_attribute_float_1: number;
+    inventory_attribute_float_2: number;
+    inventory_attribute_float_3: number;
+    inventory_attribute_integer_1: number;
+    inventory_attribute_integer_5: number;
+    inventory_attribute_string_1: string;
+    inventory_attribute_string_10: string;
     inventory_detail_number: string;
     invoice_line_number: string;
     invoice_number: string;
@@ -155,6 +212,7 @@ export class InventoryDetail {
     tracking_number: string;
     updated_at: DateTime;
     warehouse_id: Warehouse;
+    work_reference: PickWorkHeader;
 }
 
 export class InventoryLoad {
@@ -164,30 +222,58 @@ export class InventoryLoad {
     dynamic_name: string;
     id: string;
     load_number: string;
+    load_unit_of_cargo_code: string;
     pallet_id: PalletDetail;
-    storage_location: string;
+    storage_location: LocationMaster;
     updated_at: DateTime;
-    warehouse_id: Warehouse;
+    warehouse: Warehouse;
+}
+
+export class InventoryStatus {
+    inventory_status: string;
+    part_client_id: PartMaster;
+    part_number: PartMaster;
+    status_description: string;
+    sub_number: InventorySubLocation;
 }
 
 export class InventorySubLocation {
     load_number: InventoryLoad;
     sub_number: string;
+    sub_unit_of_cargo_code: string;
+    work_reference: string;
 }
 
 export class LocationMaster {
+    ABC_code: string;
     area: AreaMaster;
+    area_code: string;
+    auto_move_flag: boolean;
+    border_padding: number;
+    bottom_left_x_coordinate: number;
+    bottom_left_y_coordinate: number;
+    bottom_right_x_coordinate: number;
+    bottom_right_y_coordinate: number;
+    building: BuildingMaster;
     containerZone: ContainerZone;
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
+    device: DeviceMaster;
     id: string;
     locationAccess: string;
     locationType: LocationType;
+    location_length: number;
+    location_status: string;
+    location_volume_capacity: number;
+    location_width: number;
     movementZone: MovementZone;
     pickZone: PickZone;
-    storageLocation: string;
     storageZone: StorageZone;
     storage_location: string;
+    top_left_x_coordinate: number;
+    top_left_y_coordinate: number;
+    top_right_x_coordinate: number;
+    top_right_y_coordinate: number;
     updated_at: DateTime;
     warehouse: Warehouse;
     workZone: WorkZoneMaster;
@@ -235,13 +321,18 @@ export class NoteType {
 }
 
 export class OrderHeader {
-    client_id: Client;
+    client: Client;
+    client_id: string;
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
     id: string;
+    order_date: DateTime;
+    order_id: string;
     order_number: string;
+    order_status: string;
     updated_at: DateTime;
-    warehouse_id: Warehouse;
+    warehouse: WarehouseMaster;
+    warehouse_id: string;
 }
 
 export class OrderLine {
@@ -265,10 +356,27 @@ export class PalletDetail {
     updated_at: DateTime;
 }
 
+export class PartFTP {
+    FTP_code: FTPMaster;
+    part_client_id: PartMaster;
+    part_number: PartMaster;
+    warehouse_id: Warehouse;
+}
+
 export class PartMaster {
+    alternate_part_type: string;
+    attribute_date_1: DateTime;
+    attribute_date_2: DateTime;
+    attribute_float_1: number;
+    attribute_float_3: number;
+    attribute_integer_1: number;
+    attribute_integer_5: number;
+    attribute_string_1: string;
+    attribute_string_10: string;
     client_id: Client;
-    description: string;
+    display_part_number: string;
     part_client_id: string;
+    part_master_column_1: string;
     part_number: string;
     supplier_number: SupplierMaster;
     warehouse_id: Warehouse;
@@ -300,6 +408,23 @@ export abstract class IQuery {
     abstract users(): User[] | Promise<User[]>;
 }
 
+export class RFIDReader {
+    device: DeviceMaster;
+    group_name: string;
+    reader_id: string;
+    warehouse: Warehouse;
+}
+
+export class ReportConfiguration {
+    created_user_id: string;
+    creation_date: DateTime;
+    last_update_date: DateTime;
+    last_update_user_id: string;
+    report_description: string;
+    report_id: string;
+    report_name: string;
+}
+
 export class RuleSetCommand {
     command_configuration_id: CommandConfiguration;
     created_at: DateTime;
@@ -308,6 +433,66 @@ export class RuleSetCommand {
     rule_sequence: number;
     rule_set: string;
     updated_at: DateTime;
+}
+
+export class ServiceAsset {
+    asset_id: string;
+    asset_name: string;
+    asset_tag: string;
+    description: string;
+    roll_call_flag: boolean;
+    warehouse: Warehouse;
+}
+
+export class ServiceMaster {
+    active_status: boolean;
+    activity_code: string;
+    created_user_id: string;
+    creation_date: DateTime;
+    image_file: string;
+    modified_date: DateTime;
+    modified_user_id: string;
+    service_id: string;
+    service_rate: ServiceRateMaster;
+    service_type: string;
+    warehouse_service: WarehouseService;
+}
+
+export class ServiceRateMaster {
+    address_id: AddressMaster;
+    category_number: string;
+    category_type: string;
+    client: Client;
+    common_code: string;
+    confirm_service_id: ConfirmService;
+    destination_area: string;
+    insertion_date: DateTime;
+    insertion_user_id: string;
+    inventory_status: InventoryStatus;
+    last_update_date: DateTime;
+    last_update_user_id: string;
+    load_level: string;
+    modified_date: DateTime;
+    modified_user_id: string;
+    movement_type: string;
+    order_line_number: OrderLine;
+    order_number: OrderHeader;
+    order_subline_number: OrderLine;
+    order_type: string;
+    part_client_id: PartMaster;
+    part_number: PartMaster;
+    quantity_by_code: number;
+    rate_service_name: string;
+    service_enabled_flag: boolean;
+    service_level: string;
+    service_rate_id: string;
+    service_request_flag: boolean;
+    stop_activity_type: string;
+    supplier_number: SupplierMaster;
+    trailer_type: string;
+    user_id: UserMaster;
+    vehicle_type: VehicleType;
+    version_number: string;
 }
 
 export class ShipmentHeader {
@@ -324,12 +509,14 @@ export class ShipmentHeader {
 }
 
 export class ShipmentLine {
+    client_id: Client;
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
     id: string;
     order_line_number: OrderLine;
     order_number: OrderHeader;
     order_subline_number: OrderLine;
+    shipment_id: string;
     shipment_line_id: string;
     updated_at: DateTime;
 }
@@ -350,6 +537,20 @@ export class SupplierMaster {
     warehouse_id: string;
 }
 
+export class TrailerMaster {
+    description: string;
+    trailer_id: string;
+    trailer_number: string;
+    warehouse: Warehouse;
+}
+
+export class TrailerType {
+    trailer_type: string;
+    trailer_type_description: string;
+    trailer_type_id: string;
+    trailer_type_name: string;
+}
+
 export class User {
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
@@ -362,11 +563,44 @@ export class User {
     updated_at: DateTime;
 }
 
+export class UserMaster {
+    email: string;
+    first_name: string;
+    last_name: string;
+    password: string;
+    role: string;
+    user_id: string;
+    username: string;
+}
+
+export class VehicleType {
+    vehicle_type: string;
+    vehicle_type_description: string;
+    vehicle_type_id: string;
+    vehicle_type_name: string;
+}
+
 export class Warehouse {
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
     id: string;
     updated_at: DateTime;
+    warehouse_id: string;
+}
+
+export class WarehouseMaster {
+    warehouse_id: string;
+}
+
+export class WarehouseService {
+    load_level: string;
+    mixed_part_flag: boolean;
+    modified_date: DateTime;
+    modified_user_id: string;
+    segment_number: string;
+    service_enabled_flag: boolean;
+    service_id: string;
+    special_service_code: string;
     warehouse_id: string;
 }
 

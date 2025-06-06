@@ -3,13 +3,15 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Index } from 'typ
 import { BaseEntity } from '../common/entities/base.entity';
 import { Warehouse } from './warehouse.entity';
 import { Client } from './client.entity';
-import { OrderHeader } from './orderheader.entity';
+import { OrderHeader } from './order_header.entity';
 import { CustomsConsignment } from './customs_consignment.entity';
 import { ShipmentLine } from './shipment_line.entity';
 import { Distribution } from './distribution.entity';
 import { InventoryLoad } from './inventory_load.entity';
 import { InventorySubLocation } from './inventory_sub_location.entity';
 import { PartMaster } from './part_master.entity';
+import { FTPMaster } from './ftp_master.entity';
+import { PickWorkHeader } from './pick_work_header.entity';
 
 @ObjectType('InventoryDetail')
 @Entity('inventory_detail')
@@ -110,4 +112,50 @@ export class InventoryDetail extends BaseEntity {
     @Field(() => String, { description: 'Tracking number.' })
     @Column({ type: 'varchar', length: 255, nullable: false })
     tracking_number: string;
+
+    @Field(() => FTPMaster, { description: 'Foreign key referencing FTP_Master.' })
+    @ManyToOne(() => FTPMaster)
+    @JoinColumn({ name: 'FTP_code', referencedColumnName: 'FTP_code' })
+    FTP_code: FTPMaster;
+
+    @Field(() => PickWorkHeader, { description: 'Foreign key referencing Pick_Work_Header.' })
+    @ManyToOne(() => PickWorkHeader)
+    @JoinColumn({ name: 'work_reference', referencedColumnName: 'work_reference' })
+    work_reference: PickWorkHeader;
+
+    @Field(() => String, { description: 'Generic string attribute 1 for inventory.' })
+    @Column({ name: 'inventory_attribute_string_1', type: 'varchar', length: 255, nullable: true })
+    inventory_attribute_string_1: string;
+
+    @Field(() => String, { description: 'Generic string attribute 10 for inventory.' })
+    @Column({ name: 'inventory_attribute_string_10', type: 'varchar', length: 255, nullable: true })
+    inventory_attribute_string_10: string;
+
+    @Field(() => Number, { description: 'Generic integer attribute 1 for inventory.' })
+    @Column({ name: 'inventory_attribute_integer_1', type: 'int', nullable: true })
+    inventory_attribute_integer_1: number;
+
+    @Field(() => Number, { description: 'Generic integer attribute 5 for inventory.' })
+    @Column({ name: 'inventory_attribute_integer_5', type: 'int', nullable: true })
+    inventory_attribute_integer_5: number;
+
+    @Field(() => Number, { description: 'Generic float attribute 1 for inventory.' })
+    @Column({ name: 'inventory_attribute_float_1', type: 'float', nullable: true })
+    inventory_attribute_float_1: number;
+
+    @Field(() => Number, { description: 'Generic float attribute 2 for inventory.' })
+    @Column({ name: 'inventory_attribute_float_2', type: 'float', nullable: true })
+    inventory_attribute_float_2: number;
+
+    @Field(() => Number, { description: 'Generic float attribute 3 for inventory.' })
+    @Column({ name: 'inventory_attribute_float_3', type: 'float', nullable: true })
+    inventory_attribute_float_3: number;
+
+    @Field(() => Date, { description: 'Generic date attribute 1 for inventory.' })
+    @Column({ name: 'inventory_attribute_date_1', type: 'date', nullable: true })
+    inventory_attribute_date_1: Date;
+
+    @Field(() => Date, { description: 'Generic date attribute 2 for inventory.' })
+    @Column({ name: 'inventory_attribute_date_2', type: 'date', nullable: true })
+    inventory_attribute_date_2: Date;
 }

@@ -2,11 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AddressMaster {
+  """Address ID."""
+  address_id: String!
+
+  """City name."""
+  city: String!
+
+  """Country name."""
+  country: String!
+
+  """Postal code."""
+  postal_code: String!
+
+  """State or province."""
+  state: String!
+
+  """Street address."""
+  street: String!
+}
+
 type AreaMaster {
   """Unique identifier for the area code."""
   area_code: String!
 
-  """Foreign key referencing the Building_Master table."""
+  """Primary and Foreign key referencing Building_Master."""
   building: BuildingMaster!
   created_at: DateTime!
   deleted_at: DateTime
@@ -15,6 +35,20 @@ type AreaMaster {
 
   """Foreign key referencing the Warehouse table."""
   warehouse: Warehouse!
+}
+
+type AssetFeature {
+  """Description of the asset feature."""
+  description: String!
+
+  """Unique identifier for the asset feature."""
+  feature_id: String!
+
+  """Name of the asset feature."""
+  feature_name: String!
+
+  """Foreign key referencing Service_Asset."""
+  serviceAsset: ServiceAsset!
 }
 
 type AssetMaster {
@@ -26,6 +60,17 @@ type AssetMaster {
   id: ID!
   updated_at: DateTime!
   warehouse_id: Warehouse!
+}
+
+type AssetType {
+  """Unique identifier for the asset type."""
+  asset_type: String!
+
+  """Primary and Foreign key referencing Asset_Feature."""
+  feature: AssetFeature!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
 }
 
 type BuildingMaster {
@@ -64,6 +109,23 @@ type CommandConfiguration {
   deleted_at: DateTime
   id: ID!
   updated_at: DateTime!
+}
+
+type ConfirmService {
+  """Unique identifier for the confirm service."""
+  confirm_service_id: String!
+
+  """Date of confirmation."""
+  confirmation_date: DateTime!
+
+  """Confirmation status flag."""
+  confirmation_status: Boolean!
+
+  """User ID who confirmed the service."""
+  confirmed_user_id: String!
+
+  """Foreign key referencing Service_Rate_Master."""
+  service_rate: ServiceRateMaster!
 }
 
 type ContainerZone {
@@ -119,6 +181,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DeviceMaster {
+  """Class of the device."""
+  device_class: String!
+
+  """Unique identifier for the device."""
+  device_code: String!
+
+  """Name of the device."""
+  device_name: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
+}
+
 type Distribution {
   """Primary and Foreign key referencing the Client table."""
   client_id: Client!
@@ -171,7 +247,26 @@ type DistributionType {
   updated_at: DateTime!
 }
 
+type FTPMaster {
+  """Unique identifier for the FTP code."""
+  FTP_code: String!
+}
+
+type HoldMaster {
+  """Unique identifier for the hold."""
+  hold_number: String!
+
+  """Prefix for the hold."""
+  hold_prefix: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
+}
+
 type InventoryDetail {
+  """Foreign key referencing FTP_Master."""
+  FTP_code: FTPMaster!
+
   """Primary and Foreign key referencing the Client table."""
   client_id: Client!
   created_at: DateTime!
@@ -186,6 +281,33 @@ type InventoryDetail {
   """Foreign key referencing the Distribution table."""
   distribution_id: Distribution!
   id: ID!
+
+  """Generic date attribute 1 for inventory."""
+  inventory_attribute_date_1: DateTime!
+
+  """Generic date attribute 2 for inventory."""
+  inventory_attribute_date_2: DateTime!
+
+  """Generic float attribute 1 for inventory."""
+  inventory_attribute_float_1: Float!
+
+  """Generic float attribute 2 for inventory."""
+  inventory_attribute_float_2: Float!
+
+  """Generic float attribute 3 for inventory."""
+  inventory_attribute_float_3: Float!
+
+  """Generic integer attribute 1 for inventory."""
+  inventory_attribute_integer_1: Float!
+
+  """Generic integer attribute 5 for inventory."""
+  inventory_attribute_integer_5: Float!
+
+  """Generic string attribute 1 for inventory."""
+  inventory_attribute_string_1: String!
+
+  """Generic string attribute 10 for inventory."""
+  inventory_attribute_string_10: String!
 
   """Unique identifier for the inventory detail."""
   inventory_detail_number: String!
@@ -235,6 +357,9 @@ type InventoryDetail {
 
   """Primary and Foreign key referencing the Warehouse table."""
   warehouse_id: Warehouse!
+
+  """Foreign key referencing Pick_Work_Header."""
+  work_reference: PickWorkHeader!
 }
 
 type InventoryLoad {
@@ -251,15 +376,35 @@ type InventoryLoad {
   """Unique identifier for the inventory load."""
   load_number: String!
 
+  """Unit of cargo code for the load."""
+  load_unit_of_cargo_code: String!
+
   """Foreign key referencing the Pallet_Detail table."""
   pallet_id: PalletDetail!
 
-  """Storage location for the load."""
-  storage_location: String!
+  """Foreign key referencing Location_Master."""
+  storage_location: LocationMaster!
   updated_at: DateTime!
 
   """Foreign key referencing the Warehouse table."""
-  warehouse_id: Warehouse!
+  warehouse: Warehouse!
+}
+
+type InventoryStatus {
+  """Unique identifier for the inventory status."""
+  inventory_status: String!
+
+  """Foreign key referencing PartMaster."""
+  part_client_id: PartMaster!
+
+  """Foreign key referencing PartMaster."""
+  part_number: PartMaster!
+
+  """Status description."""
+  status_description: String!
+
+  """Foreign key referencing InventorySubLocation."""
+  sub_number: InventorySubLocation!
 }
 
 type InventorySubLocation {
@@ -268,16 +413,52 @@ type InventorySubLocation {
 
   """Unique identifier for the sub-location."""
   sub_number: String!
+
+  """Sub unit of cargo code."""
+  sub_unit_of_cargo_code: String!
+
+  """Work reference."""
+  work_reference: String!
 }
 
 type LocationMaster {
+  """ABC classification code."""
+  ABC_code: String!
+
   """Foreign key referencing Area_Master."""
   area: AreaMaster!
+
+  """Area code."""
+  area_code: String!
+
+  """Auto move flag."""
+  auto_move_flag: Boolean!
+
+  """Padding for the border."""
+  border_padding: Float!
+
+  """Bottom-left X coordinate."""
+  bottom_left_x_coordinate: Float!
+
+  """Bottom-left Y coordinate."""
+  bottom_left_y_coordinate: Float!
+
+  """Bottom-right X coordinate."""
+  bottom_right_x_coordinate: Float!
+
+  """Bottom-right Y coordinate."""
+  bottom_right_y_coordinate: Float!
+
+  """Foreign key referencing Building_Master."""
+  building: BuildingMaster!
 
   """Primary and Foreign key referencing Container_Zone."""
   containerZone: ContainerZone!
   created_at: DateTime!
   deleted_at: DateTime
+
+  """Foreign key referencing Device_Master."""
+  device: DeviceMaster!
   id: ID!
 
   """Location access details."""
@@ -286,20 +467,41 @@ type LocationMaster {
   """Primary and Foreign key referencing Location_Type."""
   locationType: LocationType!
 
+  """Length of the location."""
+  location_length: Float!
+
+  """Status of the location."""
+  location_status: String!
+
+  """Volume capacity of the location."""
+  location_volume_capacity: Float!
+
+  """Width of the location."""
+  location_width: Float!
+
   """Primary and Foreign key referencing Movement_Zone."""
   movementZone: MovementZone!
 
   """Primary and Foreign key referencing Pick_Zone."""
   pickZone: PickZone!
 
-  """Storage location."""
-  storageLocation: String!
-
   """Primary and Foreign key referencing Storage_Zone."""
   storageZone: StorageZone!
 
   """Storage location."""
   storage_location: String!
+
+  """Top-left X coordinate."""
+  top_left_x_coordinate: Float!
+
+  """Top-left Y coordinate."""
+  top_left_y_coordinate: Float!
+
+  """Top-right X coordinate."""
+  top_right_x_coordinate: Float!
+
+  """Top-right Y coordinate."""
+  top_right_y_coordinate: Float!
   updated_at: DateTime!
 
   """Primary and Foreign key referencing the Warehouse table."""
@@ -369,17 +571,32 @@ type NoteType {
 
 type OrderHeader {
   """Foreign key referencing the Client table."""
-  client_id: Client!
+  client: Client!
+
+  """Client ID associated with the order."""
+  client_id: String!
   created_at: DateTime!
   deleted_at: DateTime
   id: ID!
 
-  """Unique identifier for the order header."""
+  """Date when the order was created."""
+  order_date: DateTime!
+
+  """Order ID."""
+  order_id: String!
+
+  """Order number."""
   order_number: String!
+
+  """Status of the order."""
+  order_status: String!
   updated_at: DateTime!
 
-  """Foreign key referencing the Warehouse table."""
-  warehouse_id: Warehouse!
+  """Foreign key referencing the WarehouseMaster table."""
+  warehouse: WarehouseMaster!
+
+  """Warehouse ID where the order is stored."""
+  warehouse_id: String!
 }
 
 type OrderLine {
@@ -416,15 +633,59 @@ type PalletDetail {
   updated_at: DateTime!
 }
 
+type PartFTP {
+  """Primary and Foreign key referencing FTP_Master."""
+  FTP_code: FTPMaster!
+
+  """Primary and Foreign key referencing Part_Master."""
+  part_client_id: PartMaster!
+
+  """Primary and Foreign key referencing Part_Master."""
+  part_number: PartMaster!
+
+  """Primary and Foreign key referencing the Warehouse table."""
+  warehouse_id: Warehouse!
+}
+
 type PartMaster {
+  """Alternate part type."""
+  alternate_part_type: String!
+
+  """Generic date attribute 1."""
+  attribute_date_1: DateTime!
+
+  """Generic date attribute 2."""
+  attribute_date_2: DateTime!
+
+  """Generic float attribute 1."""
+  attribute_float_1: Float!
+
+  """Generic float attribute 3."""
+  attribute_float_3: Float!
+
+  """Generic integer attribute 1."""
+  attribute_integer_1: Float!
+
+  """Generic integer attribute 5."""
+  attribute_integer_5: Float!
+
+  """Generic string attribute 1."""
+  attribute_string_1: String!
+
+  """Generic string attribute 10."""
+  attribute_string_10: String!
+
   """Foreign key referencing the Client table."""
   client_id: Client!
 
-  """Description of the part."""
-  description: String!
+  """Display part number."""
+  display_part_number: String!
 
-  """Client ID associated with the part."""
+  """Client ID for the part."""
   part_client_id: String!
+
+  """Additional part master column."""
+  part_master_column_1: String!
 
   """Unique identifier for the part."""
   part_number: String!
@@ -473,6 +734,43 @@ type Query {
   users: [User!]!
 }
 
+type RFIDReader {
+  """Foreign key referencing Device_Master."""
+  device: DeviceMaster!
+
+  """Group name for the reader."""
+  group_name: String!
+
+  """Unique identifier for the RFID reader."""
+  reader_id: String!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+}
+
+type ReportConfiguration {
+  """User ID who created the report configuration."""
+  created_user_id: String!
+
+  """Date of report configuration creation."""
+  creation_date: DateTime!
+
+  """Date of last update."""
+  last_update_date: DateTime!
+
+  """User ID who last updated the report configuration."""
+  last_update_user_id: String!
+
+  """Description of the report."""
+  report_description: String!
+
+  """Unique identifier for the report configuration."""
+  report_id: String!
+
+  """Name of the report."""
+  report_name: String!
+}
+
 type RuleSetCommand {
   """Foreign key referencing Command_Configuration."""
   command_configuration_id: CommandConfiguration!
@@ -486,6 +784,165 @@ type RuleSetCommand {
   """Name of the rule set."""
   rule_set: String!
   updated_at: DateTime!
+}
+
+type ServiceAsset {
+  """Unique identifier for the service asset."""
+  asset_id: String!
+
+  """Name of the service asset."""
+  asset_name: String!
+
+  """Asset tag."""
+  asset_tag: String!
+
+  """Description of the service asset."""
+  description: String!
+
+  """Roll call flag."""
+  roll_call_flag: Boolean!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+}
+
+type ServiceMaster {
+  """Active status of the service master."""
+  active_status: Boolean!
+
+  """Activity code."""
+  activity_code: String!
+
+  """User ID who created the service master."""
+  created_user_id: String!
+
+  """Date of service master creation."""
+  creation_date: DateTime!
+
+  """Image file associated with the service."""
+  image_file: String!
+
+  """Date of modification."""
+  modified_date: DateTime!
+
+  """User ID who modified the record."""
+  modified_user_id: String!
+
+  """Unique identifier for the service."""
+  service_id: String!
+
+  """Foreign key referencing Service_Rate_Master."""
+  service_rate: ServiceRateMaster!
+
+  """Type of service."""
+  service_type: String!
+
+  """Foreign key referencing Warehouse_Service."""
+  warehouse_service: WarehouseService!
+}
+
+type ServiceRateMaster {
+  """Foreign key referencing Address_Master."""
+  address_id: AddressMaster!
+
+  """Category number."""
+  category_number: String!
+
+  """Category type."""
+  category_type: String!
+
+  """Foreign key referencing the Client table."""
+  client: Client!
+
+  """Common code."""
+  common_code: String!
+
+  """Foreign key referencing Confirm_Service."""
+  confirm_service_id: ConfirmService!
+
+  """Destination area."""
+  destination_area: String!
+
+  """Date of insertion."""
+  insertion_date: DateTime!
+
+  """User ID who inserted the record."""
+  insertion_user_id: String!
+
+  """Foreign key referencing Inventory_Status."""
+  inventory_status: InventoryStatus!
+
+  """Date of last update."""
+  last_update_date: DateTime!
+
+  """User ID who last updated the record."""
+  last_update_user_id: String!
+
+  """Load level."""
+  load_level: String!
+
+  """Date of modification."""
+  modified_date: DateTime!
+
+  """User ID who modified the record."""
+  modified_user_id: String!
+
+  """Type of movement."""
+  movement_type: String!
+
+  """Foreign key referencing Order_Line."""
+  order_line_number: OrderLine!
+
+  """Foreign key referencing Order_Header."""
+  order_number: OrderHeader!
+
+  """Foreign key referencing Order_Line."""
+  order_subline_number: OrderLine!
+
+  """Type of order."""
+  order_type: String!
+
+  """Foreign key referencing Part_Master."""
+  part_client_id: PartMaster!
+
+  """Foreign key referencing Part_Master."""
+  part_number: PartMaster!
+
+  """Quantity by code."""
+  quantity_by_code: Float!
+
+  """Name of the rate service."""
+  rate_service_name: String!
+
+  """Service enabled flag."""
+  service_enabled_flag: Boolean!
+
+  """Service level."""
+  service_level: String!
+
+  """Unique identifier for the service rate."""
+  service_rate_id: String!
+
+  """Service request flag."""
+  service_request_flag: Boolean!
+
+  """Stop activity type."""
+  stop_activity_type: String!
+
+  """Foreign key referencing Supplier_Master."""
+  supplier_number: SupplierMaster!
+
+  """Type of trailer."""
+  trailer_type: String!
+
+  """Foreign key referencing User_Master."""
+  user_id: UserMaster!
+
+  """Foreign key referencing Vehicle_Type."""
+  vehicle_type: VehicleType!
+
+  """Version number."""
+  version_number: String!
 }
 
 type ShipmentHeader {
@@ -513,18 +970,23 @@ type ShipmentHeader {
 }
 
 type ShipmentLine {
+  """Foreign key referencing the Client table."""
+  client_id: Client!
   created_at: DateTime!
   deleted_at: DateTime
   id: ID!
 
-  """Foreign key referencing Order_Line table."""
+  """Foreign key referencing Order_Line."""
   order_line_number: OrderLine!
 
-  """Foreign key referencing Order_Header table."""
+  """Foreign key referencing Order_Header."""
   order_number: OrderHeader!
 
-  """Foreign key referencing Order_Line table."""
+  """Foreign key referencing Order_Line."""
   order_subline_number: OrderLine!
+
+  """Shipment ID."""
+  shipment_id: String!
 
   """Unique identifier for the shipment line."""
   shipment_line_id: String!
@@ -558,6 +1020,34 @@ type SupplierMaster {
   warehouse_id: String!
 }
 
+type TrailerMaster {
+  """Description of the trailer."""
+  description: String!
+
+  """Unique identifier for the trailer."""
+  trailer_id: String!
+
+  """Trailer number."""
+  trailer_number: String!
+
+  """Foreign key referencing the Warehouse table."""
+  warehouse: Warehouse!
+}
+
+type TrailerType {
+  """Type of the trailer."""
+  trailer_type: String!
+
+  """Description of the trailer type."""
+  trailer_type_description: String!
+
+  """Trailer Type ID."""
+  trailer_type_id: String!
+
+  """Name of the trailer type."""
+  trailer_type_name: String!
+}
+
 type User {
   created_at: DateTime!
   deleted_at: DateTime
@@ -570,6 +1060,29 @@ type User {
   updated_at: DateTime!
 }
 
+type UserMaster {
+  """Email address of the user."""
+  email: String!
+
+  """First name of the user."""
+  first_name: String!
+
+  """Last name of the user."""
+  last_name: String!
+
+  """Password of the user."""
+  password: String!
+
+  """Role of the user."""
+  role: String!
+
+  """User ID."""
+  user_id: String!
+
+  """Username of the user."""
+  username: String!
+}
+
 """User role enumeration"""
 enum UserRole {
   ADMIN
@@ -577,11 +1090,59 @@ enum UserRole {
   USER
 }
 
+type VehicleType {
+  """Type of the vehicle."""
+  vehicle_type: String!
+
+  """Description of the vehicle type."""
+  vehicle_type_description: String!
+
+  """Vehicle Type ID."""
+  vehicle_type_id: String!
+
+  """Name of the vehicle type."""
+  vehicle_type_name: String!
+}
+
 type Warehouse {
   created_at: DateTime!
   deleted_at: DateTime
   id: ID!
   updated_at: DateTime!
+  warehouse_id: String!
+}
+
+type WarehouseMaster {
+  """Unique identifier for the warehouse."""
+  warehouse_id: String!
+}
+
+type WarehouseService {
+  """Load level."""
+  load_level: String!
+
+  """Flag indicating if parts are mixed."""
+  mixed_part_flag: Boolean!
+
+  """Date of modification."""
+  modified_date: DateTime!
+
+  """User ID who modified the record."""
+  modified_user_id: String!
+
+  """Segment number."""
+  segment_number: String!
+
+  """Service enabled flag."""
+  service_enabled_flag: Boolean!
+
+  """Primary and Foreign key referencing Service_Master."""
+  service_id: String!
+
+  """Special service code."""
+  special_service_code: String!
+
+  """Primary and Foreign key referencing the Warehouse table."""
   warehouse_id: String!
 }
 

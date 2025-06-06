@@ -3,6 +3,7 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Index } from 'typ
 import { BaseEntity } from '../common/entities/base.entity';
 import { Warehouse } from './warehouse.entity';
 import { PalletDetail } from './pallet_detail.entity';
+import { LocationMaster } from './location_master.entity';
 
 @ObjectType('InventoryLoad')
 @Entity('inventory_load')
@@ -15,11 +16,16 @@ export class InventoryLoad extends BaseEntity {
     @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
     @ManyToOne(() => Warehouse)
     @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
-    warehouse_id: string;
+    warehouse: Warehouse;
 
-    @Field(() => String, { description: 'Storage location for the load.' })
-    @Column({ name: 'storage_location', type: 'varchar', length: 255, nullable: true })
-    storage_location: string;
+    @Field(() => LocationMaster, { description: 'Foreign key referencing Location_Master.' })
+    @ManyToOne(() => LocationMaster)
+    @JoinColumn({ name: 'storage_location', referencedColumnName: 'storage_location' })
+    storage_location: LocationMaster;
+
+    @Field(() => String, { description: 'Unit of cargo code for the load.' })
+    @Column({ name: 'load_unit_of_cargo_code', type: 'varchar', length: 255, nullable: true })
+    load_unit_of_cargo_code: string;
 
     @Field(() => PalletDetail, { description: 'Foreign key referencing the Pallet_Detail table.' })
     @ManyToOne(() => PalletDetail)

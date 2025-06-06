@@ -1,6 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
-import { PickWorkHeader } from './pick_work_header.entity';
 import { Warehouse } from './warehouse.entity';
 import { Client } from './client.entity';
 import { WorkOrderDetail } from './work_order_detail.entity';
@@ -14,9 +13,8 @@ export class PickWorkDetail {
   @PrimaryColumn({ name: 'work_reference_detail_id' })
   work_reference_detail_id: string;
 
-  @Field(() => PickWorkHeader, { description: 'Foreign key referencing Pick_Work_Header.' })
-  @ManyToOne(() => PickWorkHeader)
-  @JoinColumn({ name: 'work_reference', referencedColumnName: 'work_reference' })
+  @Field(() => String, { description: 'Work reference.' })
+  @Column({ name: 'work_reference', type: 'varchar', length: 255, nullable: true })
   work_reference: string;
 
   @Field(() => String, { description: 'Combination code.' })
@@ -51,10 +49,10 @@ export class PickWorkDetail {
   @Field(() => InventoryDetail, { description: 'Foreign key referencing Inventory_Detail.' })
   @ManyToOne(() => InventoryDetail)
   @JoinColumn({ name: 'inventory_detail_number', referencedColumnName: 'inventory_detail_number' })
-  inventory_detail_number: string;
+  inventory_detail: InventoryDetail;
 
   @Field(() => ShipmentLine, { description: 'Foreign key referencing Shipment_Line.' })
   @ManyToOne(() => ShipmentLine)
   @JoinColumn({ name: 'shipment_line_id', referencedColumnName: 'shipment_line_id' })
-  shipment_line_id: string;
+  shipment_line: ShipmentLine;
 } 

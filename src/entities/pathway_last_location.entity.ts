@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
 import { BaseEntity } from '../common/entities/base.entity';
 import { LocationType } from './location_type.entity';
@@ -66,10 +66,10 @@ export class PathwayLastLocation extends BaseEntity {
     storageLocation: string;
 
     @Field(() => String, { description: 'Part number.' })
-    @Column({ name: 'part_number' })
+    @PrimaryColumn({ name: 'part_number' })
     partNumber: string;
 
     @Field(() => String, { description: 'Client ID for the part.' })
-    @Column({ name: 'part_client_id' })
+    @PrimaryColumn({ name: 'part_client_id' })
     partClientId: string;
 } 
