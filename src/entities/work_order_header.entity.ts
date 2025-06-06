@@ -1,26 +1,26 @@
-import { ObjectType, Field } from '@nestjs/graphql';
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { BaseEntity } from '../common/entities/base.entity';
 import { CustomsConsignment } from './customs_consignment.entity';
 
 @ObjectType('WorkOrderHeader')
-@Entity('work_order_header')
+@Entity('wkohdr')
 @Index('IDX_work_order_number', ['work_order_number'], { unique: true })
 @Index('IDX_work_order_revision', ['work_order_revision'], { unique: true })
 @Index('IDX_work_order_client_id', ['client_id'], { unique: true })
 @Index('IDX_work_order_warehouse_id', ['warehouse_id'], { unique: true })
 export class WorkOrderHeader extends BaseEntity {
-    @Field(() => String, { description: 'Unique identifier for the work order.' })
-    @PrimaryColumn({ name: 'work_order_number' })
-    work_order_number: string;
-
-    @Field(() => String, { description: 'Revision of the work order.' })
-    @PrimaryColumn({ name: 'work_order_revision' })
-    work_order_revision: string;
-
     @Field(() => String, { description: 'Client ID.' })
     @PrimaryColumn({ name: 'client_id' })
     client_id: string;
+
+    @Field(() => String, { description: 'Work order number.' })
+    @PrimaryColumn({ name: 'work_order_number' })
+    work_order_number: string;
+
+    @Field(() => String, { description: 'Work order revision.' })
+    @PrimaryColumn({ name: 'work_order_revision' })
+    work_order_revision: string;
 
     @Field(() => String, { description: 'Warehouse ID.' })
     @PrimaryColumn({ name: 'warehouse_id' })

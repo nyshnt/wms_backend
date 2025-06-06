@@ -1,25 +1,26 @@
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BaseEntity } from '../common/entities/base.entity';
-import { Warehouse } from './warehouse.entity';
-import { BuildingMaster } from './building_master.entity';
 
 @ObjectType('AreaMaster')
 @Entity('area_master')
-export class AreaMaster extends BaseEntity {
+export class AreaMaster {
     @Field(() => String, { description: 'Unique identifier for the area code.' })
     @PrimaryColumn({ name: 'area_code' })
     area_code: string;
 
-    @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
+    @Field(() => String, { description: 'Warehouse ID.' })
     @PrimaryColumn({ name: 'warehouse_id' })
-    @ManyToOne(() => Warehouse)
-    @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
-    warehouse: Warehouse;
+    warehouse_id: string;
 
-    @Field(() => BuildingMaster, { description: 'Primary and Foreign key referencing Building_Master.' })
-    @PrimaryColumn({ name: 'building_id' })
-    @ManyToOne(() => BuildingMaster)
-    @JoinColumn({ name: 'building_id', referencedColumnName: 'building_id' })
-    building: BuildingMaster;
+    @Field(() => String, { description: 'Building ID.' })
+    @Column({ name: 'building_id', type: 'varchar' })
+    building_id: string;
+
+    @Field(() => Boolean, { description: 'Shipment dock flag.' })
+    @Column({ name: 'shipment_dock_flag', type: 'boolean' })
+    shipment_dock_flag: boolean;
+
+    @Field(() => Boolean, { description: 'Receiving dock flag.' })
+    @Column({ name: 'receiving_dock_flag', type: 'boolean' })
+    receiving_dock_flag: boolean;
 } 

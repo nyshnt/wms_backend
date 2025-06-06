@@ -1,32 +1,38 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Warehouse } from './warehouse.entity';
 
 @ObjectType('ServiceAsset')
 @Entity('service_asset')
 export class ServiceAsset {
-  @Field(() => String, { description: 'Unique identifier for the service asset.' })
+  @Field(() => String, { description: 'Service asset ID.' })
+  @PrimaryColumn({ name: 'service_asset_id' })
+  service_asset_id: string;
+
+  @Field(() => String, { description: 'Client ID.' })
+  @PrimaryColumn({ name: 'client_id' })
+  client_id: string;
+
+  @Field(() => String, { description: 'Warehouse ID.' })
+  @PrimaryColumn({ name: 'warehouse_id' })
+  warehouse_id: string;
+
+  @Field(() => String, { description: 'Part number.' })
+  @Column({ name: 'part_number', type: 'varchar' })
+  part_number: string;
+
+  @Field(() => String, { description: 'Part client ID.' })
+  @Column({ name: 'part_client_id', type: 'varchar' })
+  part_client_id: string;
+
+  @Field(() => String, { description: 'Lot number.' })
+  @Column({ name: 'lot_number', type: 'varchar' })
+  lot_number: string;
+
+  @Field(() => String, { description: 'Supplier number.' })
+  @Column({ name: 'supplier_number', type: 'varchar' })
+  supplier_number: string;
+
+  @Field(() => String, { description: 'Asset ID.' })
   @PrimaryColumn({ name: 'asset_id' })
   asset_id: string;
-
-  @Field(() => String, { description: 'Name of the service asset.' })
-  @Column({ name: 'asset_name', type: 'varchar', length: 255, nullable: true })
-  asset_name: string;
-
-  @Field(() => String, { description: 'Description of the service asset.' })
-  @Column({ name: 'description', type: 'varchar', length: 255, nullable: true })
-  description: string;
-
-  @Field(() => Warehouse, { description: 'Foreign key referencing the Warehouse table.' })
-  @ManyToOne(() => Warehouse)
-  @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
-  warehouse: Warehouse;
-
-  @Field(() => Boolean, { description: 'Roll call flag.' })
-  @Column({ name: 'roll_call_flag', type: 'boolean', nullable: true })
-  roll_call_flag: boolean;
-
-  @Field(() => String, { description: 'Asset tag.' })
-  @Column({ name: 'asset_tag', type: 'varchar', length: 255, nullable: true })
-  asset_tag: string;
 }

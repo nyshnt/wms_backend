@@ -15,37 +15,53 @@ import { ShipmentLine } from './shipment_line.entity';
 @Index('IDX_receiving_line_segment_number', ['segment_number'], { unique: true })
 @Index('IDX_receiving_line_warehouse_id', ['warehouse_id'], { unique: true })
 export class ReceivingLine extends BaseEntity {
-    @Field(() => String, { description: 'Tracking number for the receiving line.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @Field(() => String, { description: 'Tracking number.' })
+    @PrimaryColumn({ name: 'tracking_number' })
     tracking_number: string;
 
     @Field(() => String, { description: 'Client ID.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'client_id' })
     client_id: string;
 
     @Field(() => String, { description: 'Supplier number.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'supplier_number' })
     supplier_number: string;
 
-    @Field(() => String, { description: 'Invoice number.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
-    invoice_number: string;
-
     @Field(() => String, { description: 'Invoice line number.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'invoice_line_number' })
     invoice_line_number: string;
 
+    @Field(() => String, { description: 'Invoice number.' })
+    @PrimaryColumn({ name: 'invoice_number' })
+    invoice_number: string;
+
     @Field(() => String, { description: 'Invoice subline number.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'invoice_subline_number' })
     invoice_subline_number: string;
 
     @Field(() => String, { description: 'Segment number.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'segment_number' })
     segment_number: string;
 
     @Field(() => String, { description: 'Warehouse ID.' })
-    @PrimaryColumn({ type: 'varchar', length: 255 })
+    @PrimaryColumn({ name: 'warehouse_id' })
     warehouse_id: string;
+
+    @Field(() => String, { description: 'Part number.' })
+    @Column({ name: 'part_number', type: 'varchar' })
+    part_number: string;
+
+    @Field(() => String, { description: 'Lot number.' })
+    @Column({ name: 'lot_number', type: 'varchar' })
+    lot_number: string;
+
+    @Field(() => String, { description: 'Origin code.' })
+    @Column({ name: 'origin_code', type: 'varchar' })
+    origin_code: string;
+
+    @Field(() => Boolean, { description: 'Consignment flag.' })
+    @Column({ name: 'consignment_flag', type: 'boolean' })
+    consignment_flag: boolean;
 
     @Field(() => String, { description: 'Generic string attribute 1 for inventory.' })
     @Column({ name: 'inventory_attribute_string_1', type: 'varchar', length: 255, nullable: true })

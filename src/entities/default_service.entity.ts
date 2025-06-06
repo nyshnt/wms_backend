@@ -14,7 +14,7 @@ import { AddressMaster } from './address_master.entity';
 import { UserMaster } from './user_master.entity';
 
 @ObjectType('DefaultService')
-@Entity('default_service')
+@Entity('def_serv')
 export class DefaultService {
   @Field(() => String, { description: 'Service ID.' })
   @PrimaryColumn({ name: 'service_id' })
@@ -28,137 +28,163 @@ export class DefaultService {
   @PrimaryColumn({ name: 'warehouse_id' })
   warehouse_id: string;
 
+  @Field(() => String, { description: 'Confirm service ID.' })
+  @PrimaryColumn({ name: 'confirm_service_id' })
+  confirm_service_id: string;
+
   @Field(() => String, { description: 'Default service code.' })
-  @Column({ name: 'default_service_code', type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'default_service_code', type: 'varchar' })
   default_service_code: string;
 
-  @Field(() => Client, { description: 'Foreign key referencing the Client table.' })
+  @Field(() => String, { description: 'Foreign key referencing the Client table.' })
+  @Column({ name: 'client_id', type: 'varchar' })
+  client_id: string;
+
+  @Field(() => String, { description: 'Carrier code.' })
+  @Column({ name: 'carrier_code', type: 'varchar' })
+  carrier_code: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Part_Master.' })
+  @Column({ name: 'part_number', type: 'varchar' })
+  part_number: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Part_Master.' })
+  @Column({ name: 'part_client_id', type: 'varchar' })
+  part_client_id: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Inventory_Status.' })
+  @Column({ name: 'inventory_status', type: 'varchar' })
+  inventory_status: string;
+
+  @Field(() => String, { description: 'Type of inventory.' })
+  @Column({ name: 'inventory_type', type: 'varchar' })
+  inventory_type: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Supplier_Master.' })
+  @Column({ name: 'supplier_number', type: 'varchar' })
+  supplier_number: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Customer_Master.' })
+  @Column({ name: 'customer_number', type: 'varchar' })
+  customer_number: string;
+
+  @Field(() => String, { description: 'Type of order.' })
+  @Column({ name: 'order_type', type: 'varchar' })
+  order_type: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Service_Rate_Master.' })
+  @Column({ name: 'service_rate_id', type: 'varchar' })
+  service_rate_id: string;
+
+  @Field(() => Boolean, { description: 'Service request flag.' })
+  @Column({ name: 'service_request_flag', type: 'boolean' })
+  service_request_flag: boolean;
+
+  @Field(() => String, { description: 'Foreign key referencing Order_Header.' })
+  @Column({ name: 'order_number', type: 'varchar' })
+  order_number: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Order_Line.' })
+  @Column({ name: 'order_line_number', type: 'varchar' })
+  order_line_number: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Order_Line.' })
+  @Column({ name: 'order_subline_number', type: 'varchar' })
+  order_subline_number: string;
+
+  @Field(() => String, { description: 'Service level.' })
+  @Column({ name: 'service_level', type: 'varchar' })
+  service_level: string;
+
+  @Field(() => String, { description: 'Type of customer.' })
+  @Column({ name: 'customer_type', type: 'varchar' })
+  customer_type: string;
+
+  @Field(() => String, { description: 'Destination area.' })
+  @Column({ name: 'destination_area', type: 'varchar' })
+  destination_area: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Trailer_Type.' })
+  @Column({ name: 'trailer_type', type: 'varchar' })
+  trailer_type: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Vehicle_Type.' })
+  @Column({ name: 'vehicle_type', type: 'varchar' })
+  vehicle_type: string;
+
+  @Field(() => String, { description: 'Name of the rate service.' })
+  @Column({ name: 'rate_service_name', type: 'varchar' })
+  rate_service_name: string;
+
+  @Field(() => String, { description: 'Foreign key referencing Address_Master.' })
+  @Column({ name: 'address_id', type: 'varchar' })
+  address_id: string;
+
+  @Field(() => String, { description: 'Stop activity type.' })
+  @Column({ name: 'stop_activity_type', type: 'varchar' })
+  stop_activity_type: string;
+
+  @Field(() => String, { description: 'Common code.' })
+  @Column({ name: 'common_code', type: 'varchar' })
+  common_code: string;
+
+  @Field(() => String, { description: 'Foreign key referencing User_Master.' })
+  @Column({ name: 'user_id', type: 'varchar' })
+  user_id: string;
+
+  @Field(() => String, { description: 'User ID.' })
+  @Column({ name: 'usrid', type: 'varchar' })
+  usrid: string;
+
+  @Field(() => String, { description: 'Destination location.' })
+  @Column({ name: 'destination_location', type: 'varchar' })
+  destination_location: string;
+
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id', referencedColumnName: 'client_id' })
   client: Client;
 
-  @Field(() => String, { description: 'Carrier code.' })
-  @Column({ name: 'carrier_code', type: 'varchar', length: 255, nullable: true })
-  carrier_code: string;
-
-  @Field(() => PartMaster, { description: 'Foreign key referencing Part_Master.' })
   @ManyToOne(() => PartMaster)
-  @JoinColumn({ name: 'part_number', referencedColumnName: 'part_number' })
-  part_number: PartMaster;
+  @JoinColumn([{ name: 'part_number', referencedColumnName: 'part_number' }, { name: 'part_client_id', referencedColumnName: 'part_client_id' }])
+  partMaster: PartMaster;
 
-  @Field(() => PartMaster, { description: 'Foreign key referencing Part_Master.' })
-  @ManyToOne(() => PartMaster)
-  @JoinColumn({ name: 'part_client_id', referencedColumnName: 'part_client_id' })
-  part_client_id: PartMaster;
-
-  @Field(() => InventoryStatus, { description: 'Foreign key referencing Inventory_Status.' })
   @ManyToOne(() => InventoryStatus)
   @JoinColumn({ name: 'inventory_status', referencedColumnName: 'inventory_status' })
-  inventory_status: InventoryStatus;
+  inventoryStatus: InventoryStatus;
 
-  @Field(() => String, { description: 'Type of inventory.' })
-  @Column({ name: 'inventory_type', type: 'varchar', length: 255, nullable: true })
-  inventory_type: string;
-
-  @Field(() => SupplierMaster, { description: 'Foreign key referencing Supplier_Master.' })
   @ManyToOne(() => SupplierMaster)
   @JoinColumn({ name: 'supplier_number', referencedColumnName: 'supplier_number' })
-  supplier_number: SupplierMaster;
+  supplierMaster: SupplierMaster;
 
-  @Field(() => CustomerMaster, { description: 'Foreign key referencing Customer_Master.' })
   @ManyToOne(() => CustomerMaster)
   @JoinColumn({ name: 'customer_number', referencedColumnName: 'customer_number' })
-  customer_number: CustomerMaster;
+  customerMaster: CustomerMaster;
 
-  @Field(() => String, { description: 'Type of order.' })
-  @Column({ name: 'order_type', type: 'varchar', length: 255, nullable: true })
-  order_type: string;
-
-  @Field(() => ServiceRateMaster, { description: 'Foreign key referencing Service_Rate_Master.' })
   @ManyToOne(() => ServiceRateMaster)
   @JoinColumn({ name: 'service_rate_id', referencedColumnName: 'service_rate_id' })
-  service_rate_id: ServiceRateMaster;
+  serviceRateMaster: ServiceRateMaster;
 
-  @Field(() => Boolean, { description: 'Service request flag.' })
-  @Column({ name: 'service_request_flag', type: 'boolean', nullable: true })
-  service_request_flag: boolean;
-
-  @Field(() => OrderHeader, { description: 'Foreign key referencing Order_Header.' })
   @ManyToOne(() => OrderHeader)
   @JoinColumn({ name: 'order_number', referencedColumnName: 'order_number' })
-  order_number: OrderHeader;
+  orderHeader: OrderHeader;
 
-  @Field(() => OrderLine, { description: 'Foreign key referencing Order_Line.' })
   @ManyToOne(() => OrderLine)
-  @JoinColumn({ name: 'order_line_number', referencedColumnName: 'order_line_number' })
-  order_line_number: OrderLine;
+  @JoinColumn([{ name: 'order_line_number', referencedColumnName: 'order_line_number' }, { name: 'order_subline_number', referencedColumnName: 'order_subline_number' }])
+  orderLine: OrderLine;
 
-  @Field(() => OrderLine, { description: 'Foreign key referencing Order_Line.' })
-  @ManyToOne(() => OrderLine)
-  @JoinColumn({ name: 'order_subline_number', referencedColumnName: 'order_subline_number' })
-  order_subline_number: OrderLine;
-
-  @Field(() => String, { description: 'Service level.' })
-  @Column({ name: 'service_level', type: 'varchar', length: 255, nullable: true })
-  service_level: string;
-
-  @Field(() => String, { description: 'Type of customer.' })
-  @Column({ name: 'customer_type', type: 'varchar', length: 255, nullable: true })
-  customer_type: string;
-
-  @Field(() => String, { description: 'Destination area.' })
-  @Column({ name: 'destination_area', type: 'varchar', length: 255, nullable: true })
-  destination_area: string;
-
-  @Field(() => TrailerType, { description: 'Foreign key referencing Trailer_Type.' })
   @ManyToOne(() => TrailerType)
   @JoinColumn({ name: 'trailer_type', referencedColumnName: 'trailer_type' })
-  trailer_type: TrailerType;
+  trailerType: TrailerType;
 
-  @Field(() => VehicleType, { description: 'Foreign key referencing Vehicle_Type.' })
   @ManyToOne(() => VehicleType)
   @JoinColumn({ name: 'vehicle_type', referencedColumnName: 'vehicle_type' })
-  vehicle_type: VehicleType;
+  vehicleType: VehicleType;
 
-  @Field(() => String, { description: 'Name of the rate service.' })
-  @Column({ name: 'rate_service_name', type: 'varchar', length: 255, nullable: true })
-  rate_service_name: string;
-
-  @Field(() => AddressMaster, { description: 'Foreign key referencing Address_Master.' })
   @ManyToOne(() => AddressMaster)
   @JoinColumn({ name: 'address_id', referencedColumnName: 'address_id' })
-  address_id: AddressMaster;
+  addressMaster: AddressMaster;
 
-  @Field(() => String, { description: 'Stop activity type.' })
-  @Column({ name: 'stop_activity_type', type: 'varchar', length: 255, nullable: true })
-  stop_activity_type: string;
-
-  @Field(() => String, { description: 'Common code.' })
-  @Column({ name: 'common_code', type: 'varchar', length: 255, nullable: true })
-  common_code: string;
-
-  @Field(() => UserMaster, { description: 'Foreign key referencing User_Master.' })
   @ManyToOne(() => UserMaster)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
-  user_id: UserMaster;
-
-  @Field(() => String, { description: 'Version number.' })
-  @Column({ name: 'version_number', type: 'varchar', length: 255, nullable: true })
-  version_number: string;
-
-  @Field(() => Date, { description: 'Date of insertion.' })
-  @Column({ name: 'insertion_date', type: 'date', nullable: true })
-  insertion_date: Date;
-
-  @Field(() => Date, { description: 'Date of last update.' })
-  @Column({ name: 'last_update_date', type: 'date', nullable: true })
-  last_update_date: Date;
-
-  @Field(() => String, { description: 'User ID who inserted the record.' })
-  @Column({ name: 'insertion_user_id', type: 'varchar', length: 255, nullable: true })
-  insertion_user_id: string;
-
-  @Field(() => String, { description: 'User ID who last updated the record.' })
-  @Column({ name: 'last_update_user_id', type: 'varchar', length: 255, nullable: true })
-  last_update_user_id: string;
+  userMaster: UserMaster;
 } 

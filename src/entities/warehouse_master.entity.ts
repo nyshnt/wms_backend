@@ -7,4 +7,4 @@ export class WarehouseMaster {
   @Field(() => String, { description: 'Unique identifier for the warehouse.' })
   @PrimaryColumn({ name: 'warehouse_id' })
   warehouse_id: string;
-} 
+}

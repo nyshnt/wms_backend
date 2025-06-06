@@ -22,19 +22,29 @@ type AddressMaster {
   street: String!
 }
 
+type Aisle {
+  """Unique identifier for the aisle."""
+  aisle_id: String!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
+}
+
 type AreaMaster {
   """Unique identifier for the area code."""
   area_code: String!
 
-  """Primary and Foreign key referencing Building_Master."""
-  building: BuildingMaster!
-  created_at: DateTime!
-  deleted_at: DateTime
-  id: ID!
-  updated_at: DateTime!
+  """Building ID."""
+  building_id: String!
 
-  """Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
+  """Receiving dock flag."""
+  receiving_dock_flag: Boolean!
+
+  """Shipment dock flag."""
+  shipment_dock_flag: Boolean!
+
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type AssetFeature {
@@ -51,6 +61,11 @@ type AssetFeature {
   serviceAsset: ServiceAsset!
 }
 
+type AssetMapDetail {
+  """Unique identifier for the asset map detail."""
+  map_detail_id: String!
+}
+
 type AssetMaster {
   asset_id: String!
   asset_number: String!
@@ -62,15 +77,67 @@ type AssetMaster {
   warehouse_id: Warehouse!
 }
 
-type AssetType {
-  """Unique identifier for the asset type."""
+type AssetSlot {
+  """Asset type."""
   asset_type: String!
 
-  """Primary and Foreign key referencing Asset_Feature."""
-  feature: AssetFeature!
+  """Slot."""
+  slot: String!
 
-  """Primary and Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
+  """Code for the slot."""
+  slot_code: String!
+}
+
+type AssetType {
+  """Asset type."""
+  asset_type: String!
+
+  """Asset type ID."""
+  asset_type_id: String!
+
+  """Client ID."""
+  client_id: String!
+
+  """Lot number."""
+  lot_number: String!
+
+  """Part client ID."""
+  part_client_id: String!
+
+  """Part number."""
+  part_number: String!
+
+  """Supplier number."""
+  supplier_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
+}
+
+type BuildToOrderAudit {
+  """Asset type."""
+  asset_type: String!
+
+  """Begin time."""
+  begin_time: DateTime!
+
+  """Unique identifier for the build-to-order audit."""
+  build_to_order_audit_id: String!
+
+  """Status of the build-to-order audit."""
+  build_to_order_audit_status: String!
+
+  """Type of build-to-order audit."""
+  build_to_order_audit_type: String!
+
+  """End time."""
+  end_time: DateTime!
+
+  """Load number."""
+  load_number: String!
+
+  """Shipment ID."""
+  shipment_id: String!
 }
 
 type BuildingMaster {
@@ -83,6 +150,26 @@ type BuildingMaster {
 
   """Foreign key referencing the Warehouse table."""
   warehouse: Warehouse!
+}
+
+type CarrierMatrixHeader {
+  """Carrier code."""
+  carrier_code: String!
+
+  """Carrier group."""
+  carrier_group: String!
+
+  """Unique identifier for the carrier matrix header."""
+  carrier_matrix_id: String!
+
+  """Sequence number."""
+  sequence_number: Float!
+
+  """Service level."""
+  service_level: String!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
 }
 
 type CarrierMove {
@@ -102,6 +189,20 @@ type Client {
   updated_at: DateTime!
 }
 
+type ClientMaster {
+  """Address of the client."""
+  client_address: String!
+
+  """Contact number of the client."""
+  client_contact_number: String!
+
+  """Unique identifier for the client."""
+  client_id: String!
+
+  """Name of the client."""
+  client_name: String!
+}
+
 type CommandConfiguration {
   """Unique identifier for the command configuration."""
   command_configuration_id: String!
@@ -109,6 +210,20 @@ type CommandConfiguration {
   deleted_at: DateTime
   id: ID!
   updated_at: DateTime!
+}
+
+type CompartmentHeader {
+  """Foreign key referencing the Client table."""
+  client_id: String!
+
+  """Unique identifier for the compartment header."""
+  compartment_key: String!
+
+  """Foreign key referencing Work_Order_Header."""
+  work_order_number: String!
+
+  """Foreign key referencing Work_Order_Header."""
+  work_order_revision: String!
 }
 
 type ConfirmService {
@@ -174,6 +289,68 @@ type CustomsConsignment {
 
   """Flag indicating if there's a work order."""
   work_order_flag: Boolean!
+}
+
+type CycleCountHeader {
+  """Unique identifier for the cycle count batch."""
+  count_batch_number: String!
+
+  """Date when the count batch was created."""
+  creation_date: DateTime!
+
+  """Flags for identifiers."""
+  identifier_flag_1: Boolean!
+
+  """Inventory identifiers."""
+  inventory_identifier_1: String!
+
+  """Inventory values."""
+  inventory_value_1: String!
+
+  """Sequence number."""
+  sequence_number: CycleCountSchedule!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
+}
+
+type CycleCountSchedule {
+  """Batch number for the count."""
+  count_batch_number: String!
+
+  """Identifier for the count."""
+  count_id: String!
+
+  """Part number."""
+  part_number: PartMaster!
+
+  """Unique sequence number for the schedule."""
+  sequence_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
+}
+
+type CycleCountTemplateHeader {
+  """Flag indicating if the template is auto-generated."""
+  auto_generate_template_flag: Boolean!
+
+  """Unique identifier for the cycle count template."""
+  cycle_count_template_id: String!
+
+  """Identifier for the warehouse."""
+  warehouse_id: String!
+}
+
+type CycleCountType {
+  """Unique identifier for the cycle count type."""
+  count_type: String!
+
+  """Flag indicating if details are present."""
+  detail_flag: Boolean!
+
+  """Operation code associated with the type."""
+  operation_code: String!
 }
 
 """
@@ -269,6 +446,12 @@ type InventoryDetail {
 
   """Primary and Foreign key referencing the Client table."""
   client_id: Client!
+
+  """Foreign key referencing Compartment_Header."""
+  compartment_key: CompartmentHeader!
+
+  """Consignment flag."""
+  consignment_flag: Boolean!
   created_at: DateTime!
 
   """Foreign key referencing Customs_Consignment."""
@@ -324,6 +507,9 @@ type InventoryDetail {
   """Primary and Foreign key referencing Inventory_Load."""
   load_number: InventoryLoad!
 
+  """Lot number."""
+  lot_number: String!
+
   """Order line number."""
   order_line_number: Float!
 
@@ -338,6 +524,9 @@ type InventoryDetail {
 
   """Foreign key referencing Part_Master."""
   part_number: PartMaster!
+
+  """Receiving key."""
+  receiving_key: String!
 
   """Foreign key referencing the Shipment_Line table."""
   shipment_line_id: ShipmentLine!
@@ -363,31 +552,29 @@ type InventoryDetail {
 }
 
 type InventoryLoad {
-  created_at: DateTime!
-  deleted_at: DateTime
+  """Client ID."""
+  client_id: String!
 
-  """Device code."""
-  device_code: String!
+  """Load ID."""
+  load_id: String!
 
-  """Dynamic name associated with the load."""
-  dynamic_name: String!
-  id: ID!
-
-  """Unique identifier for the inventory load."""
+  """Load number."""
   load_number: String!
 
-  """Unit of cargo code for the load."""
-  load_unit_of_cargo_code: String!
+  """Lot number."""
+  lot_number: String!
 
-  """Foreign key referencing the Pallet_Detail table."""
-  pallet_id: PalletDetail!
+  """Part client ID."""
+  part_client_id: String!
 
-  """Foreign key referencing Location_Master."""
-  storage_location: LocationMaster!
-  updated_at: DateTime!
+  """Part number."""
+  part_number: String!
 
-  """Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
+  """Supplier number."""
+  supplier_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type InventoryStatus {
@@ -408,107 +595,37 @@ type InventoryStatus {
 }
 
 type InventorySubLocation {
-  """Foreign key referencing Inventory_Load."""
-  load_number: InventoryLoad!
+  """Client ID."""
+  client_id: String!
 
-  """Unique identifier for the sub-location."""
+  """Lot number."""
+  lot_number: String!
+
+  """Part client ID."""
+  part_client_id: String!
+
+  """Part number."""
+  part_number: String!
+
+  """Sub-location ID."""
+  sub_location_id: String!
+
+  """Sub number."""
   sub_number: String!
 
-  """Sub unit of cargo code."""
-  sub_unit_of_cargo_code: String!
+  """Supplier number."""
+  supplier_number: String!
 
-  """Work reference."""
-  work_reference: String!
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type LocationMaster {
-  """ABC classification code."""
-  ABC_code: String!
-
-  """Foreign key referencing Area_Master."""
-  area: AreaMaster!
-
-  """Area code."""
-  area_code: String!
-
-  """Auto move flag."""
-  auto_move_flag: Boolean!
-
-  """Padding for the border."""
-  border_padding: Float!
-
-  """Bottom-left X coordinate."""
-  bottom_left_x_coordinate: Float!
-
-  """Bottom-left Y coordinate."""
-  bottom_left_y_coordinate: Float!
-
-  """Bottom-right X coordinate."""
-  bottom_right_x_coordinate: Float!
-
-  """Bottom-right Y coordinate."""
-  bottom_right_y_coordinate: Float!
-
-  """Foreign key referencing Building_Master."""
-  building: BuildingMaster!
-
-  """Primary and Foreign key referencing Container_Zone."""
-  containerZone: ContainerZone!
-  created_at: DateTime!
-  deleted_at: DateTime
-
-  """Foreign key referencing Device_Master."""
-  device: DeviceMaster!
-  id: ID!
-
-  """Location access details."""
-  locationAccess: String!
-
-  """Primary and Foreign key referencing Location_Type."""
-  locationType: LocationType!
-
-  """Length of the location."""
-  location_length: Float!
-
-  """Status of the location."""
-  location_status: String!
-
-  """Volume capacity of the location."""
-  location_volume_capacity: Float!
-
-  """Width of the location."""
-  location_width: Float!
-
-  """Primary and Foreign key referencing Movement_Zone."""
-  movementZone: MovementZone!
-
-  """Primary and Foreign key referencing Pick_Zone."""
-  pickZone: PickZone!
-
-  """Primary and Foreign key referencing Storage_Zone."""
-  storageZone: StorageZone!
-
   """Storage location."""
   storage_location: String!
 
-  """Top-left X coordinate."""
-  top_left_x_coordinate: Float!
-
-  """Top-left Y coordinate."""
-  top_left_y_coordinate: Float!
-
-  """Top-right X coordinate."""
-  top_right_x_coordinate: Float!
-
-  """Top-right Y coordinate."""
-  top_right_y_coordinate: Float!
-  updated_at: DateTime!
-
-  """Primary and Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
-
-  """Primary and Foreign key referencing Work_Zone_Master."""
-  workZone: WorkZoneMaster!
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type LocationType {
@@ -533,6 +650,32 @@ type MovementZone {
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
+}
+
+type NonServiceAsset {
+  """Asset status."""
+  asset_status: String!
+
+  """Client ID."""
+  client_id: String!
+
+  """Lot number."""
+  lot_number: String!
+
+  """Non-service asset ID."""
+  non_service_asset_id: String!
+
+  """Part client ID."""
+  part_client_id: String!
+
+  """Part number."""
+  part_number: String!
+
+  """Supplier number."""
+  supplier_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type NoteDetail {
@@ -623,14 +766,18 @@ type OrderLine {
   warehouse_id: Warehouse!
 }
 
-type PalletDetail {
-  created_at: DateTime!
-  deleted_at: DateTime
-  id: ID!
+type ParcelShipperRule {
+  """Location ID."""
+  location_id: LocationMaster!
 
-  """Unique identifier for the pallet."""
-  pallet_id: String!
-  updated_at: DateTime!
+  """Unique identifier for the parcel shipper rule."""
+  rule_id: String!
+
+  """Sequence number."""
+  sequence_number: Float!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
 }
 
 type PartFTP {
@@ -748,27 +895,80 @@ type RFIDReader {
   warehouse: Warehouse!
 }
 
+type ReasonCode {
+  """Unique identifier for the reason code."""
+  reason_code: String!
+}
+
+type ReasonGroup {
+  """Unique identifier for the reason group."""
+  reason_group: String!
+}
+
+type ReceivingTruckTracking {
+  """Unique tracking number for the truck."""
+  tracking_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
+}
+
+type ReplenishmentWork {
+  """Lot number."""
+  lot_number: String!
+
+  """Origin code."""
+  origin_code: String!
+
+  """Part client ID."""
+  part_client_id: String!
+
+  """Part number."""
+  part_number: String!
+
+  """Quantity picked."""
+  picked_quantity: Float!
+
+  """Unique identifier for the replenishment work."""
+  replenishment_reference: String!
+
+  """Revision level."""
+  revision_level: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
+}
+
 type ReportConfiguration {
-  """User ID who created the report configuration."""
-  created_user_id: String!
+  """EMS event name."""
+  EMS_event_name: String!
 
-  """Date of report configuration creation."""
-  creation_date: DateTime!
+  """Default printer for the report."""
+  default_printer: String!
 
-  """Date of last update."""
-  last_update_date: DateTime!
+  """Flag indicating if a digital signature is required."""
+  digital_signature_required_flag: Boolean!
 
-  """User ID who last updated the report configuration."""
-  last_update_user_id: String!
+  """Flag to enable EMS."""
+  enable_EMS_flag: Boolean!
 
-  """Description of the report."""
-  report_description: String!
+  """Functional area of the report."""
+  functional_area: String!
+
+  """Number of days to keep the report."""
+  keep_days: Float!
+
+  """Product ID."""
+  product_id: String!
 
   """Unique identifier for the report configuration."""
   report_id: String!
 
-  """Name of the report."""
-  report_name: String!
+  """File name for the report layout."""
+  report_layout_file: String!
+
+  """Type of report."""
+  report_type: String!
 }
 
 type RuleSetCommand {
@@ -787,26 +987,35 @@ type RuleSetCommand {
 }
 
 type ServiceAsset {
-  """Unique identifier for the service asset."""
+  """Asset ID."""
   asset_id: String!
 
-  """Name of the service asset."""
-  asset_name: String!
+  """Client ID."""
+  client_id: String!
 
-  """Asset tag."""
-  asset_tag: String!
+  """Lot number."""
+  lot_number: String!
 
-  """Description of the service asset."""
-  description: String!
+  """Part client ID."""
+  part_client_id: String!
 
-  """Roll call flag."""
-  roll_call_flag: Boolean!
+  """Part number."""
+  part_number: String!
 
-  """Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
+  """Service asset ID."""
+  service_asset_id: String!
+
+  """Supplier number."""
+  supplier_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type ServiceMaster {
+  """Activity code."""
+  actcod: String!
+
   """Active status of the service master."""
   active_status: Boolean!
 
@@ -822,11 +1031,20 @@ type ServiceMaster {
   """Image file associated with the service."""
   image_file: String!
 
+  """Image file associated with the service."""
+  imgfil: String!
+
   """Date of modification."""
   modified_date: DateTime!
 
   """User ID who modified the record."""
   modified_user_id: String!
+
+  """Unique identifier for the service."""
+  serv_id: String!
+
+  """Type of service."""
+  serv_typ: String!
 
   """Unique identifier for the service."""
   service_id: String!
@@ -993,6 +1211,31 @@ type ShipmentLine {
   updated_at: DateTime!
 }
 
+type SlotItemSetItem {
+  """Client ID."""
+  client_id: String!
+
+  """Item number."""
+  item_number: String!
+
+  """Item set."""
+  item_set: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
+}
+
+type SlotProfileItemSet {
+  """Item set."""
+  item_set: SlotItemSetItem!
+
+  """Profile name."""
+  profile_name: String!
+
+  """Warehouse ID."""
+  warehouse_id: SlotItemSetItem!
+}
+
 type StorageZone {
   created_at: DateTime!
   deleted_at: DateTime
@@ -1003,49 +1246,87 @@ type StorageZone {
   updated_at: DateTime!
 }
 
+type StorageZoneConfigurationHeader {
+  """Building ID."""
+  building_id: BuildingMaster!
+
+  """Date of insertion."""
+  insertion_date: DateTime!
+
+  """User ID who inserted the record."""
+  insertion_user_id: String!
+
+  """Date of last update."""
+  last_update_date: DateTime!
+
+  """User ID who last updated the record."""
+  last_update_user_id: String!
+
+  """Maximum level."""
+  maximum_level: Float!
+
+  """Maximum load per aisle."""
+  maximum_load_per_aisle: Float!
+
+  """Minimum level."""
+  minimum_level: Float!
+
+  """Sort sequence."""
+  sort_sequence: Float!
+
+  """Unique identifier for the storage zone configuration header."""
+  storage_zone_configuration_id: String!
+
+  """Storage zone ID."""
+  storage_zone_id: StorageZone!
+
+  """Storage strategy."""
+  strategy: String!
+
+  """Warehouse ID."""
+  warehouse_id: Warehouse!
+}
+
 type SupplierMaster {
-  """Type of asset."""
-  asset_type: String!
+  """Address ID."""
+  address_id: String!
 
-  """Status of receiving."""
-  receiving_status: String!
+  """Client ID."""
+  client_id: String!
 
-  """Unique identifier for the supplier."""
+  """Supplier number."""
   supplier_number: String!
 
-  """Trust flag."""
-  trust_flag: Boolean!
-
-  """Foreign key referencing the Warehouse table."""
-  warehouse_id: String!
+  """Tracking consignment code."""
+  tracking_consignment_code: String!
 }
 
 type TrailerMaster {
-  """Description of the trailer."""
-  description: String!
-
   """Unique identifier for the trailer."""
   trailer_id: String!
-
-  """Trailer number."""
-  trailer_number: String!
-
-  """Foreign key referencing the Warehouse table."""
-  warehouse: Warehouse!
 }
 
-type TrailerType {
-  """Type of the trailer."""
-  trailer_type: String!
+type TransportationMode {
+  """Direct flag."""
+  direct_flag: Boolean!
 
-  """Description of the trailer type."""
-  trailer_type_description: String!
+  """Date of insertion."""
+  insertion_date: DateTime!
 
-  """Trailer Type ID."""
-  trailer_type_id: String!
+  """Pallet control flag."""
+  pallet_control_flag: Boolean!
 
-  """Name of the trailer type."""
-  trailer_type_name: String!
+  """Flag for small packages."""
+  small_package_flag: Boolean!
+
+  """Unique identifier for the transportation mode."""
+  transportation_mode: String!
+
+  """Version number."""
+  version_number: String!
+
+  """Warehouse ID."""
+  warehouse_id: String!
 }
 
 type User {
@@ -1091,17 +1372,23 @@ enum UserRole {
 }
 
 type VehicleType {
+  """Load limit for the vehicle."""
+  vehicle_load_limit: String!
+
   """Type of the vehicle."""
   vehicle_type: String!
 
   """Description of the vehicle type."""
   vehicle_type_description: String!
 
-  """Vehicle Type ID."""
+  """Unique identifier for the vehicle type."""
   vehicle_type_id: String!
 
   """Name of the vehicle type."""
   vehicle_type_name: String!
+
+  """Voice code."""
+  voice_code: String!
 }
 
 type Warehouse {
@@ -1146,26 +1433,66 @@ type WarehouseService {
   warehouse_id: String!
 }
 
+type WarehouseTransportationMode {
+  """Lock user flag."""
+  lock_user_flag: Boolean!
+
+  """Transportation mode."""
+  transportation_mode: TransportationMode!
+
+  """Unit of measure code."""
+  unit_of_measure_code: WarehouseUnitOfMeasure!
+
+  """Warehouse ID."""
+  warehouse_id: TransportationMode!
+}
+
+type WarehouseUnitOfMeasure {
+  """Value of the code."""
+  code_value: String!
+
+  """Name of the column."""
+  column_name: String!
+
+  """Default shipment release flag."""
+  default_ship_release_flag: Boolean!
+
+  """Default work release flag."""
+  default_work_release_flag: Boolean!
+
+  """Unit of measure code."""
+  unit_of_measure_code: String!
+}
+
 type WorkOrderDetail {
-  """Primary and Foreign key referencing the Client table."""
+  """Client ID."""
   client_id: String!
 
-  """Process location."""
-  process_location: String!
+  """Lot number."""
+  lot_number: String!
+
+  """Part client ID."""
+  part_client_id: String!
+
+  """Part number."""
+  part_number: String!
 
   """Segment number."""
   segment_number: Float!
 
-  """Primary and Foreign key referencing the Warehouse table."""
+  """Supplier number."""
+  supplier_number: String!
+
+  """Warehouse ID."""
   warehouse_id: String!
 
-  """Line number within the work order."""
+  """Work order line number."""
   work_order_line_number: Float!
 
-  """Primary and Foreign key referencing Work_Order_Header."""
+  """Work order number."""
   work_order_number: String!
 
-  """Primary and Foreign key referencing Work_Order_Header."""
+  """Work order revision."""
   work_order_revision: String!
 }
 

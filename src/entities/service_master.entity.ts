@@ -6,21 +6,45 @@ import { WarehouseService } from './warehouse_service.entity';
 @ObjectType('ServiceMaster')
 @Entity('service_master')
 export class ServiceMaster {
+  // Old Column
   @Field(() => String, { description: 'Unique identifier for the service.' })
   @PrimaryGeneratedColumn('uuid', { name: 'service_id' })
   service_id: string;
 
+  // New Column
+  @Field(() => String, { description: 'Unique identifier for the service.' })
+  @PrimaryGeneratedColumn('uuid', { name: 'service_id' })
+  serv_id: string;
+
+  // Old Column
   @Field(() => String, { description: 'Type of service.' })
   @Column({ name: 'service_type', type: 'varchar', length: 255 })
   service_type: string;
 
+  // New Column
+  @Field(() => String, { description: 'Type of service.' })
+  @Column({ name: 'service_type', type: 'varchar', length: 255 })
+  serv_typ: string;
+
+  // Old Column
   @Field(() => String, { description: 'Activity code.' })
   @Column({ name: 'activity_code', type: 'varchar', length: 255 })
   activity_code: string;
 
+  // New Column
+  @Field(() => String, { description: 'Activity code.' })
+  @Column({ name: 'activity_code', type: 'varchar', length: 255 })
+  actcod: string;
+
+  // Old Column
   @Field(() => String, { description: 'Image file associated with the service.' })
   @Column({ name: 'image_file', type: 'varchar', length: 255 })
   image_file: string;
+
+  // New Column
+  @Field(() => String, { description: 'Image file associated with the service.' })
+  @Column({ name: 'image_file', type: 'varchar', length: 255 })
+  imgfil: string;
 
   @Field(() => Date, { description: 'Date of modification.' })
   @Column({ name: 'modified_date', type: 'timestamp' })

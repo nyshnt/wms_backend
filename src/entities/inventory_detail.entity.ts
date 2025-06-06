@@ -12,6 +12,7 @@ import { InventorySubLocation } from './inventory_sub_location.entity';
 import { PartMaster } from './part_master.entity';
 import { FTPMaster } from './ftp_master.entity';
 import { PickWorkHeader } from './pick_work_header.entity';
+import { CompartmentHeader } from './compartment_header.entity';
 
 @ObjectType('InventoryDetail')
 @Entity('inventory_detail')
@@ -158,4 +159,21 @@ export class InventoryDetail extends BaseEntity {
     @Field(() => Date, { description: 'Generic date attribute 2 for inventory.' })
     @Column({ name: 'inventory_attribute_date_2', type: 'date', nullable: true })
     inventory_attribute_date_2: Date;
+
+    @Field(() => CompartmentHeader, { description: 'Foreign key referencing Compartment_Header.' })
+    @ManyToOne(() => CompartmentHeader)
+    @JoinColumn({ name: 'compartment_key', referencedColumnName: 'compartment_key' })
+    compartment_key: CompartmentHeader;
+
+    @Field(() => String, { description: 'Receiving key.' })
+    @Column({ name: 'receiving_key', type: 'varchar' })
+    receiving_key: string;
+
+    @Field(() => String, { description: 'Lot number.' })
+    @Column({ name: 'lot_number', type: 'varchar' })
+    lot_number: string;
+
+    @Field(() => Boolean, { description: 'Consignment flag.' })
+    @Column({ name: 'consignment_flag', type: 'boolean' })
+    consignment_flag: boolean;
 }
