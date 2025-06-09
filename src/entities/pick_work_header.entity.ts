@@ -29,4 +29,20 @@ export class PickWorkHeader {
   @ManyToOne(() => PickBatch)
   @JoinColumn({ name: 'schedule_batch_id', referencedColumnName: 'schedule_batch_id' })
   schedule_batch_id: string;
+
+  @Field(() => String, { description: 'WCS pick group.' })
+  @Column({ name: 'wcs_pick_group', nullable: true })
+  wcs_pick_group: string;
+
+  @Field(() => Date, { description: 'Date WCS reported status.' })
+  @Column({ name: 'wcs_reported_date', type: 'timestamp', nullable: true })
+  wcs_reported_date: Date;
+
+  @Field(() => String, { description: 'WCS cancel pick status.' })
+  @Column({ name: 'wcs_can_pick_status', nullable: true })
+  wcs_can_pick_status: string;
+
+  @Field(() => Date, { description: 'Date of WCS cancellation request.' })
+  @Column({ name: 'wcs_cancel_request_date', type: 'timestamp', nullable: true })
+  wcs_cancel_request_date: Date;
 }

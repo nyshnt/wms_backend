@@ -1,22 +1,47 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { AddressMasterClient } from './address_master_client.entity';
+import { LocaleMaster } from './locale_master.entity';
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType('ClientMaster')
-@Entity('client_master')
+@Entity('Client_Master')
 export class ClientMaster {
   @Field(() => String, { description: 'Unique identifier for the client.' })
-  @PrimaryColumn({ name: 'client_id' })
+  @PrimaryColumn()
   client_id: string;
 
-  @Field(() => String, { description: 'Name of the client.' })
-  @Column({ name: 'client_name', type: 'varchar' })
-  client_name: string;
+  @ManyToOne(() => AddressMasterClient)
+  @JoinColumn({ name: 'address_id' })
+  address: AddressMasterClient;
 
-  @Field(() => String, { description: 'Address of the client.' })
-  @Column({ name: 'client_address', type: 'varchar' })
-  client_address: string;
+  @ManyToOne(() => LocaleMaster)
+  @JoinColumn({ name: 'bill_to_locale_id' })
+  billToLocale: LocaleMaster;
 
-  @Field(() => String, { description: 'Contact number of the client.' })
-  @Column({ name: 'client_contact_number', type: 'varchar' })
-  client_contact_number: string;
+  @Column({ nullable: true })
+  iso_currency_flag: boolean;
+
+  @Column({ nullable: true })
+  storage_billing_type: string;
+
+  @Column({ nullable: true })
+  free_storage_days: number;
+
+  @Column({ nullable: true })
+  split_storage_code: string;
+
+  @Column({ nullable: true })
+  lot_anniversary_flag: boolean;
+
+  @Column({ nullable: true })
+  status_override_flag: boolean;
+
+  @Column({ nullable: true })
+  auto_add_service_flag: boolean;
+
+  @Column({ nullable: true })
+  lot_format_id: string;
+
+  @Column({ nullable: true })
+  group_name: string;
 }

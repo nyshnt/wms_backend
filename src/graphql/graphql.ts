@@ -34,12 +34,39 @@ export class Aisle {
     warehouse_id: Warehouse;
 }
 
+export class ApplicationAuthorizationRole {
+    adjustment_threshold_cost: number;
+    adjustment_threshold_unit: string;
+    auth_group_name: string;
+    enabled_flag: boolean;
+    group_name: string;
+    parent_role_id: string;
+    role_id: string;
+}
+
+export class ApplicationAuthorizationRoleRFPickValidation {
+    enabled_flag: boolean;
+    group_name: string;
+    role_id: string;
+}
+
 export class AreaMaster {
     area_code: string;
     building_id: string;
     receiving_dock_flag: boolean;
     shipment_dock_flag: boolean;
     warehouse_id: string;
+}
+
+export class AreaMasterPickface {
+    area_code: string;
+    error_location_inv_status_flag: boolean;
+    warehouse_id: Warehouse;
+}
+
+export class AreaMasterRFPickValidation {
+    area_code: string;
+    warehouse: Warehouse;
 }
 
 export class AssetFeature {
@@ -81,6 +108,16 @@ export class AssetType {
     warehouse_id: string;
 }
 
+export class AssetTypeAssetListPicking {
+    asset_category: string;
+    asset_type_id: string;
+    container_flag: boolean;
+    list_pick_asset_flag: boolean;
+    pick_list: PickListAssetListPicking;
+    serialized_flag: boolean;
+    temporary_flag: boolean;
+}
+
 export class BuildToOrderAudit {
     asset_type: string;
     begin_time: DateTime;
@@ -118,6 +155,21 @@ export class CarrierMove {
     updated_at: DateTime;
 }
 
+export class CartonMasterAssetListPicking {
+    carton_code: string;
+    carton_footprint_code: string;
+    carton_height: number;
+    carton_length: number;
+    carton_volume: number;
+    carton_weight: number;
+    carton_width: number;
+    last_carton_footprint_code: string;
+    pick_order_flag: boolean;
+    pre_print_label_flag: boolean;
+    ship_overflow_flag: boolean;
+    warehouse: Warehouse;
+}
+
 export class Client {
     client_id: string;
     created_at: DateTime;
@@ -127,17 +179,20 @@ export class Client {
 }
 
 export class ClientMaster {
-    client_address: string;
-    client_contact_number: string;
     client_id: string;
-    client_name: string;
 }
 
 export class CommandConfiguration {
     command_configuration_id: string;
+    command_id: string;
     created_at: DateTime;
+    customer_level: string;
     deleted_at?: Nullable<DateTime>;
+    group_name: string;
     id: string;
+    modificationUser: string;
+    modification_date: DateTime;
+    syntax: string;
     updated_at: DateTime;
 }
 
@@ -312,12 +367,30 @@ export class InventoryLoad {
     warehouse_id: string;
 }
 
+export class InventoryLoadAssetListPicking {
+    load_number: string;
+    stock_location: string;
+    warehouse_id: string;
+}
+
 export class InventoryStatus {
     inventory_status: string;
     part_client_id: PartMaster;
     part_number: PartMaster;
     status_description: string;
     sub_number: InventorySubLocation;
+}
+
+export class InventoryStatusMaster {
+    insert_date: DateTime;
+    inventory_status_code: string;
+    inventory_status_description: string;
+    last_update_date: DateTime;
+}
+
+export class InventorySubDetailAssetListPicking {
+    load_number: InventoryLoadAssetListPicking;
+    sub_detail_number: string;
 }
 
 export class InventorySubLocation {
@@ -332,6 +405,8 @@ export class InventorySubLocation {
 }
 
 export class LocationMaster {
+    area_code: string;
+    stock_location: string;
     storage_location: string;
     warehouse_id: string;
 }
@@ -416,6 +491,12 @@ export class OrderLine {
     warehouse_id: Warehouse;
 }
 
+export class OrderTypeRFPickValidation {
+    bulk_pick_figure: number;
+    order_type_code: string;
+    warehouse: Warehouse;
+}
+
 export class ParcelShipperRule {
     location_id: LocationMaster;
     rule_id: string;
@@ -453,12 +534,113 @@ export class PickBatch {
     schedule_batch_id: string;
 }
 
+export class PickList {
+    max_pick_list_cube: number;
+    max_pick_list_weight: number;
+    pick_list_cube_weight_threshold: number;
+    pick_list_id: string;
+    pick_list_max_add_case_weight: number;
+    pick_list_rule: PickListRule;
+    pick_list_rule_group: PickListRuleGroup;
+    pick_list_status: string;
+    pick_list_type: string;
+    total_clients: number;
+    total_customers: number;
+    total_items: number;
+    total_lists_in_batch: number;
+    total_load_picks: number;
+    total_slots: number;
+    total_volume: number;
+    total_weight: number;
+}
+
+export class PickListAssetListPicking {
+    max_pick_list_cube: number;
+    max_pick_list_weight: number;
+    pick_list_cube_weight_threshold: number;
+    pick_list_id: string;
+    pick_list_max_add_case_weight: number;
+    pick_list_rule: PickListRule;
+    pick_list_rule_group: PickListRuleGroup;
+    pick_list_status: string;
+    pick_list_type: string;
+    total_clients: number;
+    total_customers: number;
+    total_items: number;
+    total_lists_in_batch: number;
+    total_load_picks: number;
+    total_slots: number;
+    total_volume: number;
+    total_weight: number;
+}
+
+export class PickListAssetSlotDefinition {
+    asset_slot_code: string;
+    asset_type_id_fk: AssetTypeAssetListPicking;
+    slot_asset_type: AssetType;
+    slot_type_id: string;
+}
+
+export class PickListRule {
+    allow_split_flag: boolean;
+    asset_type: AssetType;
+    assign_slot_flag: boolean;
+    client: ClientMaster;
+    combine_list_flag: boolean;
+    command_text: string;
+    confirm_material_used_part: boolean;
+    drop_at_work_zone_change_flag: boolean;
+    force_pickup_previous_flag: boolean;
+    max_start_picks: number;
+    one_pass_only_flag: boolean;
+    operator_code: string;
+    pick_list_rule_id: string;
+    pick_list_rule_name: string;
+    pick_list_type: string;
+    pick_order_by_criteria: string;
+    re_list_flag: boolean;
+    resume_list_pick_previous_operation_flag: boolean;
+    valid_flag: boolean;
+    warehouse: Warehouse;
+}
+
+export class PickListRuleGroup {
+    client: ClientMaster;
+    enabled_flag: boolean;
+    pick_list_rule_group_id: string;
+    pick_list_rule_group_name: string;
+    warehouse: Warehouse;
+}
+
+export class PickWorkDetailAssetListPicking {
+    work_reference_detail_id: string;
+}
+
 export class PickWorkHeader {
     client_id: Client;
     description: string;
     schedule_batch_id: PickBatch;
     warehouse_id: Warehouse;
+    wcs_can_pick_status: string;
+    wcs_cancel_request_date: DateTime;
+    wcs_pick_group: string;
+    wcs_reported_date: DateTime;
     work_reference: string;
+}
+
+export class PickWorkHeaderRFPickValidation {
+    approved_quantity: number;
+    asset_slot: PickListAssetSlotDefinition;
+    load_division_id: string;
+    part_client_id: string;
+    part_number: string;
+    pick_list: PickListAssetListPicking;
+    pick_status: string;
+    picked_quantity: number;
+    source_area_code: string;
+    source_location: string;
+    work_reference: string;
+    work_type: string;
 }
 
 export class PickZone {
@@ -710,6 +892,13 @@ export class VehicleType {
     voice_code: string;
 }
 
+export class WCSDiscreteLPN {
+    discrete_type: string;
+    header_id: string;
+    load_number: string;
+    lpn_id: string;
+}
+
 export class Warehouse {
     created_at: DateTime;
     deleted_at?: Nullable<DateTime>;
@@ -771,6 +960,15 @@ export class WorkZoneMaster {
     workZoneName: string;
     workZoneType: string;
     work_zone_id: string;
+}
+
+export class ZoneMaster {
+    creation_date: DateTime;
+    last_update_date: DateTime;
+    max_devices: number;
+    warehouse_id: Warehouse;
+    work_zone_code: string;
+    zone_description: string;
 }
 
 export type DateTime = any;
