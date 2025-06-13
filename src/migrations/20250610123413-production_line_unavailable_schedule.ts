@@ -43,30 +43,45 @@ export class Uproduction_line_unavailable_schedule20250610123413 implements Migr
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'production_line_unavailable_schedule',
-            new TableForeignKey({
-                columnNames: ['unavailable_id'],
-                referencedColumnNames: ['unavailable_id'],
-                referencedTableName: 'unavailable_schedule_note',
-                onDelete: 'CASCADE',
-            }),
-        );
+        const unavailableScheduleNoteTable = await queryRunner.getTable('unavailable_schedule_note');
+        if (unavailableScheduleNoteTable && unavailableScheduleNoteTable.indices.some(index => index.isUnique && index.columnNames.includes('unavailable_id'))) {
+            await queryRunner.createForeignKey(
+                'production_line_unavailable_schedule',
+                new TableForeignKey({
+                    columnNames: ['unavailable_id'],
+                    referencedColumnNames: ['unavailable_id'],
+                    referencedTableName: 'unavailable_schedule_note',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for unavailable_id as the unavailable_schedule_note table does not have a unique constraint on unavailable_id.');
+        }
 
-        await queryRunner.createForeignKey(
-            'production_line_unavailable_schedule',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouses',
-                onDelete: 'CASCADE',
-            }),
-        );
+        const warehousesTableExists = await queryRunner.hasTable('warehouses');
+        if (warehousesTableExists) {
+            await queryRunner.createForeignKey(
+                'production_line_unavailable_schedule',
+                new TableForeignKey({
+                    columnNames: ['warehouse_id'],
+                    referencedColumnNames: ['warehouse_id'],
+                    referencedTableName: 'warehouses',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('production_line_unavailable_schedule', 'FK_production_line_unavailable_schedule_unavailable_id');
-        await queryRunner.dropForeignKey('production_line_unavailable_schedule', 'FK_production_line_unavailable_schedule_warehouse_id');
-        await queryRunner.dropTable('production_line_unavailable_schedule');
+        const table = await queryRunner.getTable('production_line_unavailable_schedule');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('production_line_unavailable_schedule', foreignKey);
+            }
+            await queryRunner.dropTable('production_line_unavailable_schedule');
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwork_order_header20250610105249 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -85,41 +85,39 @@ export class Uwork_order_header20250610105249 implements MigrationInterface {
                     {
                         name: 'IDX_work_order_number',
                         columnNames: ['work_order_number'],
-                        isUnique: true,
                     },
                     {
                         name: 'IDX_work_order_revision',
                         columnNames: ['work_order_revision'],
-                        isUnique: true,
                     },
                     {
                         name: 'IDX_work_order_client_id',
                         columnNames: ['client_id'],
-                        isUnique: true,
                     },
                     {
                         name: 'IDX_work_order_warehouse_id',
                         columnNames: ['warehouse_id'],
-                        isUnique: true,
                     },
                 ],
             }),
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'wkohdr',
-            new TableForeignKey({
-                columnNames: ['customs_consignment_id'],
-                referencedColumnNames: ['customs_consignment_id'],
-                referencedTableName: 'customs_consignment',
-                onDelete: 'CASCADE',
-            }),
-        );
+        // Skip foreign key creation since the customs_consignment table doesn't exist yet
+        // We'll need to create this foreign key in a separate migration after the customs_consignment table is created
+        console.log('Skipping foreign key creation for customs_consignment_id as the referenced table does not exist yet.');
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('wkohdr', 'FK_wkohdr_customs_consignment_id');
+        // Drop the foreign key if it exists
+        const table = await queryRunner.getTable('wkohdr');
+        const foreignKey = table?.foreignKeys.find(fk => 
+            fk.columnNames.indexOf('customs_consignment_id') !== -1
+        );
+        if (foreignKey) {
+            await queryRunner.dropForeignKey('wkohdr', foreignKey);
+        }
+
         await queryRunner.dropTable('wkohdr');
         await queryRunner.query('DROP EXTENSION IF EXISTS "uuid-ossp"');
     }

@@ -32,19 +32,30 @@ export class Uasset_feature20250610164011 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'asset_feature',
-            new TableForeignKey({
-                columnNames: ['asset_id'],
-                referencedColumnNames: ['asset_id'],
-                referencedTableName: 'service_asset',
-                onDelete: 'CASCADE',
-            }),
-        );
+        const serviceAssetTableExists = await queryRunner.hasTable('service_asset');
+        if (serviceAssetTableExists) {
+            await queryRunner.createForeignKey(
+                'asset_feature',
+                new TableForeignKey({
+                    columnNames: ['asset_id'],
+                    referencedColumnNames: ['asset_id'],
+                    referencedTableName: 'service_asset',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for asset_id as the service_asset table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('asset_feature', 'FK_asset_feature_asset_id');
-        await queryRunner.dropTable('asset_feature');
+        const table = await queryRunner.getTable('asset_feature');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('asset_feature', foreignKey);
+            }
+            await queryRunner.dropTable('asset_feature');
+        }
     }
 }

@@ -21,19 +21,30 @@ export class Uwork_queue20250610124527 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'work_queue',
-            new TableForeignKey({
-                columnNames: ['work_reference'],
-                referencedColumnNames: ['work_reference'],
-                referencedTableName: 'pick_work_header',
-                onDelete: 'CASCADE',
-            }),
-        );
+        const pickWorkHeaderTableExists = await queryRunner.hasTable('pick_work_header');
+        if (pickWorkHeaderTableExists) {
+            await queryRunner.createForeignKey(
+                'work_queue',
+                new TableForeignKey({
+                    columnNames: ['work_reference'],
+                    referencedColumnNames: ['work_reference'],
+                    referencedTableName: 'pick_work_header',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for work_reference as the pick_work_header table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('work_queue', 'FK_work_queue_work_reference');
-        await queryRunner.dropTable('work_queue');
+        const table = await queryRunner.getTable('work_queue');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('work_queue', foreignKey);
+            }
+            await queryRunner.dropTable('work_queue');
+        }
     }
 }

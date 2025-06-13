@@ -26,19 +26,31 @@ export class Urule_set_command20250610114042 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'rule_set_command',
-            new TableForeignKey({
-                columnNames: ['command_configuration_id'],
-                referencedColumnNames: ['command_configuration_id'],
-                referencedTableName: 'command_configuration',
-                onDelete: 'CASCADE',
-            }),
-        );
+        // Check if command_configuration table exists before creating foreign key
+        const commandConfigurationTableExists = await queryRunner.hasTable('command_configuration');
+        if (commandConfigurationTableExists) {
+            await queryRunner.createForeignKey(
+                'rule_set_command',
+                new TableForeignKey({
+                    columnNames: ['command_configuration_id'],
+                    referencedColumnNames: ['command_configuration_id'],
+                    referencedTableName: 'command_configuration',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for command_configuration_id as the command_configuration table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('rule_set_command', 'FK_rule_set_command_command_configuration_id');
+        const table = await queryRunner.getTable('rule_set_command');
+        const foreignKey = table?.foreignKeys.find(fk => 
+            fk.columnNames.indexOf('command_configuration_id') !== -1
+        );
+        if (foreignKey) {
+            await queryRunner.dropForeignKey('rule_set_command', foreignKey);
+        }
         await queryRunner.dropTable('rule_set_command');
     }
 }

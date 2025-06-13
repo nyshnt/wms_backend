@@ -42,25 +42,45 @@ export class Utrailer_activity20250610133454 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKeys('trailer_activity', [
-            new TableForeignKey({
-                columnNames: ['trailer_id'],
-                referencedColumnNames: ['trailer_id'],
-                referencedTableName: 'trailer_master',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        const trailerMasterTableExists = await queryRunner.hasTable('trailer_master');
+        if (trailerMasterTableExists) {
+            await queryRunner.createForeignKey(
+                'trailer_activity',
+                new TableForeignKey({
+                    columnNames: ['trailer_id'],
+                    referencedColumnNames: ['trailer_id'],
+                    referencedTableName: 'trailer_master',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for trailer_id as the trailer_master table does not exist yet.');
+        }
+
+        const warehouseTableExists = await queryRunner.hasTable('warehouse');
+        if (warehouseTableExists) {
+            await queryRunner.createForeignKey(
+                'trailer_activity',
+                new TableForeignKey({
+                    columnNames: ['warehouse_id'],
+                    referencedColumnNames: ['warehouse_id'],
+                    referencedTableName: 'warehouse',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for warehouse_id as the warehouse table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('trailer_activity', 'FK_trailer_activity_trailer_id');
-        await queryRunner.dropForeignKey('trailer_activity', 'FK_trailer_activity_warehouse_id');
-        await queryRunner.dropTable('trailer_activity');
+        const table = await queryRunner.getTable('trailer_activity');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('trailer_activity', foreignKey);
+            }
+            await queryRunner.dropTable('trailer_activity');
+        }
     }
 }

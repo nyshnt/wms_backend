@@ -41,25 +41,45 @@ export class Uservice_asset_feature20250610162541 implements MigrationInterface 
             true,
         );
 
-        await queryRunner.createForeignKeys('service_asset_feature', [
-            new TableForeignKey({
-                columnNames: ['asset_id'],
-                referencedColumnNames: ['asset_id'],
-                referencedTableName: 'service_asset',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['feature_id'],
-                referencedColumnNames: ['feature_id'],
-                referencedTableName: 'asset_feature',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        const serviceAssetTableExists = await queryRunner.hasTable('service_asset');
+        if (serviceAssetTableExists) {
+            await queryRunner.createForeignKey(
+                'service_asset_feature',
+                new TableForeignKey({
+                    columnNames: ['asset_id'],
+                    referencedColumnNames: ['asset_id'],
+                    referencedTableName: 'service_asset',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for asset_id as the service_asset table does not exist yet.');
+        }
+
+        const assetFeatureTableExists = await queryRunner.hasTable('asset_feature');
+        if (assetFeatureTableExists) {
+            await queryRunner.createForeignKey(
+                'service_asset_feature',
+                new TableForeignKey({
+                    columnNames: ['feature_id'],
+                    referencedColumnNames: ['feature_id'],
+                    referencedTableName: 'asset_feature',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for feature_id as the asset_feature table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('service_asset_feature', 'FK_service_asset_feature_asset_id');
-        await queryRunner.dropForeignKey('service_asset_feature', 'FK_service_asset_feature_feature_id');
-        await queryRunner.dropTable('service_asset_feature');
+        const table = await queryRunner.getTable('service_asset_feature');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('service_asset_feature', foreignKey);
+            }
+            await queryRunner.dropTable('service_asset_feature');
+        }
     }
 }

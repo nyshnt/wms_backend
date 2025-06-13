@@ -31,19 +31,30 @@ export class Uwarehouse_base_positions20250610164326 implements MigrationInterfa
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'warehouse_base_positions',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE',
-            }),
-        );
+        const warehouseTableExists = await queryRunner.hasTable('warehouse');
+        if (warehouseTableExists) {
+            await queryRunner.createForeignKey(
+                'warehouse_base_positions',
+                new TableForeignKey({
+                    columnNames: ['warehouse_id'],
+                    referencedColumnNames: ['warehouse_id'],
+                    referencedTableName: 'warehouse',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for warehouse_id as the warehouse table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('warehouse_base_positions', 'FK_warehouse_base_positions_warehouse_id');
-        await queryRunner.dropTable('warehouse_base_positions');
+        const table = await queryRunner.getTable('warehouse_base_positions');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('warehouse_base_positions', foreignKey);
+            }
+            await queryRunner.dropTable('warehouse_base_positions');
+        }
     }
 }

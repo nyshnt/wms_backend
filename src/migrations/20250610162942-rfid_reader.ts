@@ -30,25 +30,37 @@ export class Urfid_reader20250610162942 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKeys('rfid_reader', [
-            new TableForeignKey({
-                columnNames: ['device_code'],
-                referencedColumnNames: ['device_code'],
-                referencedTableName: 'device_master',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        const deviceMasterTableExists = await queryRunner.hasTable('device_master');
+        if (deviceMasterTableExists) {
+            console.log('Skipping foreign key creation for device_code as the device_master table does not have a unique constraint on device_code.');
+        } else {
+            console.log('Skipping foreign key creation for device_code as the device_master table does not exist yet.');
+        }
+
+        const warehouseTableExists = await queryRunner.hasTable('warehouse');
+        if (warehouseTableExists) {
+            await queryRunner.createForeignKey(
+                'rfid_reader',
+                new TableForeignKey({
+                    columnNames: ['warehouse_id'],
+                    referencedColumnNames: ['warehouse_id'],
+                    referencedTableName: 'warehouse',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for warehouse_id as the warehouse table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('rfid_reader', 'FK_rfid_reader_device_code');
-        await queryRunner.dropForeignKey('rfid_reader', 'FK_rfid_reader_warehouse_id');
-        await queryRunner.dropTable('rfid_reader');
+        const table = await queryRunner.getTable('rfid_reader');
+        if (table) {
+            const foreignKeys = table.foreignKeys;
+            for (const foreignKey of foreignKeys) {
+                await queryRunner.dropForeignKey('rfid_reader', foreignKey);
+            }
+            await queryRunner.dropTable('rfid_reader');
+        }
     }
 }

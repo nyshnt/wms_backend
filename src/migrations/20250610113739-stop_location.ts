@@ -32,19 +32,35 @@ export class Ustop_location20250610113739 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKey(
-            'stop_location',
-            new TableForeignKey({
-                columnNames: ['carrier_move_id'],
-                referencedColumnNames: ['carrier_move_id'],
-                referencedTableName: 'carrier_move',
-                onDelete: 'CASCADE',
-            }),
-        );
+        // Check if carrier_move table exists before creating foreign key
+        const carrierMoveTableExists = await queryRunner.hasTable('carrier_move');
+        if (carrierMoveTableExists) {
+            await queryRunner.createForeignKey(
+                'stop_location',
+                new TableForeignKey({
+                    columnNames: ['carrier_move_id'],
+                    referencedColumnNames: ['carrier_move_id'],
+                    referencedTableName: 'carrier_move',
+                    onDelete: 'CASCADE',
+                }),
+            );
+        } else {
+            console.log('Skipping foreign key creation for carrier_move_id as the carrier_move table does not exist yet.');
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('stop_location', 'FK_stop_location_carrier_move_id');
+        // Get the table first to check what foreign keys exist
+        const table = await queryRunner.getTable('stop_location');
+        
+        // Drop carrier_move foreign key if it exists
+        const carrierMoveForeignKey = table?.foreignKeys.find(fk => 
+            fk.columnNames.indexOf('carrier_move_id') !== -1
+        );
+        if (carrierMoveForeignKey) {
+            await queryRunner.dropForeignKey('stop_location', carrierMoveForeignKey);
+        }
+
         await queryRunner.dropTable('stop_location');
         await queryRunner.query('DROP EXTENSION IF EXISTS "uuid-ossp"');
     }
