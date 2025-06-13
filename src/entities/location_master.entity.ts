@@ -15,7 +15,7 @@ export class LocationMaster {
   storage_location: string;
 
   @Field(() => String, { description: 'Warehouse ID.' })
-  @PrimaryColumn({ name: 'warehouse_id' })
+  @Column({ name: 'warehouse_id' })
   @ManyToOne(() => Warehouse)
   @JoinColumn({ name: 'warehouse_id', referencedColumnName: 'warehouse_id' })
   warehouse_id: string;
@@ -25,4 +25,8 @@ export class LocationMaster {
   @ManyToOne(() => AreaMaster)
   @JoinColumn({ name: 'area_code', referencedColumnName: 'area_code' })
   area_code: string;
+
+  @Field(() => String, { description: 'Location ID.' })
+  @PrimaryColumn({ name: 'location_id' })
+  location_id: string;
 }
