@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { PickListSlotLoad } from './pick_list_slot_load.entity';
 
 @ObjectType()
 @Entity('inventory_load_asset_list_picking')
@@ -15,4 +16,7 @@ export class InventoryLoadAssetListPicking {
   @Field(() => String, { description: 'Warehouse ID.' })
   @Column({ name: 'warehouse_id' })
   warehouse_id: string;
+
+  @OneToMany(() => PickListSlotLoad, pickListSlotLoad => pickListSlotLoad.inventoryLoad)
+  pickListSlotLoads: PickListSlotLoad[];
 } 
