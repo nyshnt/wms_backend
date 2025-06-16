@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucycle_count_work20250612171519 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'cycle_count_work',
@@ -41,56 +50,26 @@ export class Ucycle_count_work20250612171519 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'cycle_count_work',
-            new TableForeignKey({
-                columnNames: ['count_batch_number'],
-                referencedColumnNames: ['count_batch_number'], // Assuming count_batch_number is unique/primary in cycle_count_header
-                referencedTableName: 'cycle_count_header',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FK
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612171519-cycle_count_work.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cycle_count_work',
-            new TableForeignKey({
-                columnNames: ['stock_location'],
-                referencedColumnNames: ['storage_location'],
-                referencedTableName: 'location_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612171519-cycle_count_work.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cycle_count_work',
-            new TableForeignKey({
-                columnNames: ['count_type'],
-                referencedColumnNames: ['count_type'],
-                referencedTableName: 'cycle_count_type',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612171519-cycle_count_work.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cycle_count_work',
-            new TableForeignKey({
-                columnNames: ['part_number'],
-                referencedColumnNames: ['part_number'],
-                referencedTableName: 'part_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612171519-cycle_count_work.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cycle_count_work',
-            new TableForeignKey({
-                columnNames: ['part_client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612171519-cycle_count_work.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('cycle_count_work', 'FK_cycle_count_work_count_batch_number');

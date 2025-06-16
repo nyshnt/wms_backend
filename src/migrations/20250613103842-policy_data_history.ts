@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upolicy_data_history20250613103842 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'policy_data_history',
@@ -127,26 +136,17 @@ export class Upolicy_data_history20250613103842 implements MigrationInterface {
         );
 
         // Composite foreign key to PolicyData
-        await queryRunner.createForeignKey(
-            'policy_data_history',
-            new TableForeignKey({
-                columnNames: ['policy_code', 'policy_variable', 'policy_value', 'warehouse_id', 'sort_sequence'],
-                referencedColumnNames: ['policy_code', 'policy_variable', 'policy_value', 'warehouse_id_template', 'sort_sequence'], // Using warehouse_id_template as referenced column name
-                referencedTableName: 'policy_data',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613103842-policy_data_history.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'policy_data_history',
-            new TableForeignKey({
-                columnNames: ['modification_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613103842-policy_data_history.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('policy_data_history', 'FK_policy_data_history_policy_data'); // Generic name for composite FK

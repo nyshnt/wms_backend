@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uservice_action20250610172145 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'serv_action',
@@ -63,22 +72,14 @@ export class Uservice_action20250610172145 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('serv_action', [
-            new TableForeignKey({
-                columnNames: ['serv_id'],
-                referencedColumnNames: ['service_id'],
-                referencedTableName: 'service_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['rpt_id'],
-                referencedColumnNames: ['report_id'],
-                referencedTableName: 'report_configuration',
-                onDelete: 'SET NULL'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610172145-service_action.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('serv_action', 'FK_serv_action_service_master');
         await queryRunner.dropForeignKey('serv_action', 'FK_serv_action_report_configuration');

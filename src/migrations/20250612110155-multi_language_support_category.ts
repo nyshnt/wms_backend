@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Umulti_language_support_category20250612110155 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Multi_Language_Support_Category',
@@ -61,27 +70,14 @@ export class Umulti_language_support_category20250612110155 implements Migration
             true
         );
 
-        await queryRunner.createForeignKeys('Multi_Language_Support_Category', [
-            new TableForeignKey({
-                columnNames: ['locale_id'],
-                referencedColumnNames: ['locale_id'],
-                referencedTableName: 'locale_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['application_id'],
-                referencedColumnNames: ['application_id'],
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612110155-multi_language_support_category.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Multi_Language_Support_Category', 'FK_Multi_Language_Support_Category_locale_id');

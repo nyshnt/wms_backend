@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udda_action20250612184555 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'dda_action',
@@ -87,36 +96,20 @@ export class Udda_action20250612184555 implements MigrationInterface {
         );
 
         // Composite foreign key to DDAMaster
-        await queryRunner.createForeignKey(
-            'dda_action',
-            new TableForeignKey({
-                columnNames: ['dda_id', 'customer_level'],
-                referencedColumnNames: ['dda_id', 'customer_level'], // Assuming these form the composite primary key of dda_master
-                referencedTableName: 'dda_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612184555-dda_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dda_action',
-            new TableForeignKey({
-                columnNames: ['submit_button_mls_id'],
-                referencedColumnNames: ['category_id'], // Assuming category_id is the primary key for MultiLanguageSupportCategory
-                referencedTableName: 'multi_language_support_category',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612184555-dda_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dda_action',
-            new TableForeignKey({
-                columnNames: ['post_action_mls_id'],
-                referencedColumnNames: ['category_id'], // Assuming category_id is the primary key for MultiLanguageSupportCategory
-                referencedTableName: 'multi_language_support_category',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612184555-dda_action.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('dda_action', 'FK_dda_action_dda_master'); // Generic name for composite FK

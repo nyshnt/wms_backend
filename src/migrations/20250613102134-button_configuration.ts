@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ubutton_configuration20250613102134 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'button_configuration',
@@ -91,26 +100,17 @@ export class Ubutton_configuration20250613102134 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'button_configuration',
-            new TableForeignKey({
-                columnNames: ['caption_mls_id'],
-                referencedColumnNames: ['category_id'], // Assuming 'category_id' is the primary key for MultiLanguageSupportCategory
-                referencedTableName: 'multi_language_support_category',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102134-button_configuration.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'button_configuration',
-            new TableForeignKey({
-                columnNames: ['tooltip_text_mls_id'],
-                referencedColumnNames: ['category_id'], // Assuming 'category_id' is the primary key for MultiLanguageSupportCategory
-                referencedTableName: 'multi_language_support_category',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102134-button_configuration.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('button_configuration', 'FK_button_configuration_caption_mls_id');

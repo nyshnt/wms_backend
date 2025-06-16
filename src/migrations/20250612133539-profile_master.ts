@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uprofile_master20250612133539 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'profile_master',
@@ -51,46 +60,23 @@ export class Uprofile_master20250612133539 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'profile_master',
-            new TableForeignKey({
-                columnNames: ['application_id'],
-                referencedColumnNames: ['application_id'],
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133539-profile_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'profile_master',
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133539-profile_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'profile_master',
-            new TableForeignKey({
-                columnNames: ['option_name'],
-                referencedColumnNames: ['option_name'], // Assuming option_name is unique/primary in menu_option
-                referencedTableName: 'menu_option',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133539-profile_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'profile_master',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133539-profile_master.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('profile_master', 'FK_profile_master_application_id');

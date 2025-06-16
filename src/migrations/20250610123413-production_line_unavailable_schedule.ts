@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uproduction_line_unavailable_schedule20250610123413 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'production_line_unavailable_schedule',
@@ -45,35 +54,25 @@ export class Uproduction_line_unavailable_schedule20250610123413 implements Migr
 
         const unavailableScheduleNoteTable = await queryRunner.getTable('unavailable_schedule_note');
         if (unavailableScheduleNoteTable && unavailableScheduleNoteTable.indices.some(index => index.isUnique && index.columnNames.includes('unavailable_id'))) {
-            await queryRunner.createForeignKey(
-                'production_line_unavailable_schedule',
-                new TableForeignKey({
-                    columnNames: ['unavailable_id'],
-                    referencedColumnNames: ['unavailable_id'],
-                    referencedTableName: 'unavailable_schedule_note',
-                    onDelete: 'CASCADE',
-                }),
-            );
+            // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610123413-production_line_unavailable_schedule.ts. You should create these foreign keys when making APIs.');
         } else {
             console.log('Skipping foreign key creation for unavailable_id as the unavailable_schedule_note table does not have a unique constraint on unavailable_id.');
         }
 
         const warehousesTableExists = await queryRunner.hasTable('warehouses');
         if (warehousesTableExists) {
-            await queryRunner.createForeignKey(
-                'production_line_unavailable_schedule',
-                new TableForeignKey({
-                    columnNames: ['warehouse_id'],
-                    referencedColumnNames: ['warehouse_id'],
-                    referencedTableName: 'warehouses',
-                    onDelete: 'CASCADE',
-                }),
-            );
+            // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610123413-production_line_unavailable_schedule.ts. You should create these foreign keys when making APIs.');
         } else {
             console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
         }
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         const table = await queryRunner.getTable('production_line_unavailable_schedule');
         if (table) {

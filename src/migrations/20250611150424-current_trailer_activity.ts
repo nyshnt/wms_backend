@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucurrent_trailer_activity20250611150424 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'current_trailer_activity',
@@ -31,42 +40,23 @@ export class Ucurrent_trailer_activity20250611150424 implements MigrationInterfa
             true
         );
 
-        await queryRunner.createForeignKey('current_trailer_activity',
-            new TableForeignKey({
-                columnNames: ['trailer_id'],
-                referencedColumnNames: ['trailer_id'],
-                referencedTableName: 'trailer_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611150424-current_trailer_activity.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('current_trailer_activity',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611150424-current_trailer_activity.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('current_trailer_activity',
-            new TableForeignKey({
-                columnNames: ['device_code'],
-                referencedColumnNames: ['device_code'],
-                referencedTableName: 'device_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611150424-current_trailer_activity.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('current_trailer_activity',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611150424-current_trailer_activity.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('current_trailer_activity', 'FK_current_trailer_activity_trailer_id');

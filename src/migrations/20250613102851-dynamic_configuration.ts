@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udynamic_configuration20250613102851 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'dynamic_configuration',
@@ -66,46 +75,23 @@ export class Udynamic_configuration20250613102851 implements MigrationInterface 
             true
         );
 
-        await queryRunner.createForeignKey(
-            'dynamic_configuration',
-            new TableForeignKey({
-                columnNames: ['application_id'],
-                referencedColumnNames: ['application_id'],
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102851-dynamic_configuration.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dynamic_configuration',
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102851-dynamic_configuration.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dynamic_configuration',
-            new TableForeignKey({
-                columnNames: ['command_id'],
-                referencedColumnNames: ['command_id'], // Assuming command_id is unique/primary in command_configuration
-                referencedTableName: 'command_configuration',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102851-dynamic_configuration.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dynamic_configuration',
-            new TableForeignKey({
-                columnNames: ['modification_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613102851-dynamic_configuration.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('dynamic_configuration', 'FK_dynamic_configuration_application_id');

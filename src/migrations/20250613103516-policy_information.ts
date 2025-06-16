@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upolicy_information20250613103516 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'policy_information',
@@ -62,16 +71,14 @@ export class Upolicy_information20250613103516 implements MigrationInterface {
         );
 
         // Composite foreign key to PolicyData
-        await queryRunner.createForeignKey(
-            'policy_information',
-            new TableForeignKey({
-                columnNames: ['policy_code', 'policy_variable', 'policy_value', 'sort_sequence'],
-                referencedColumnNames: ['policy_code', 'policy_variable', 'policy_value', 'sort_sequence'], // Assuming these form the composite primary key of policy_data
-                referencedTableName: 'policy_data',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613103516-policy_information.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('policy_information', 'FK_policy_information_policy_data'); // Generic name for composite FK

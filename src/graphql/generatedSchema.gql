@@ -780,6 +780,9 @@ type LocationMaster {
   """Foreign key referencing Area_Master."""
   area_code: String!
 
+  """Location ID."""
+  location_id: String!
+
   """Unique stock location identifier."""
   stock_location: String!
 

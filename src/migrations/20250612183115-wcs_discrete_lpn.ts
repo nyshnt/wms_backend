@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwcs_discrete_lpn20250612183115 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'wcs_discrete_lpn',
@@ -31,26 +40,17 @@ export class Uwcs_discrete_lpn20250612183115 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'wcs_discrete_lpn',
-            new TableForeignKey({
-                columnNames: ['load_number'],
-                referencedColumnNames: ['load_number'],
-                referencedTableName: 'load_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183115-wcs_discrete_lpn.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'wcs_discrete_lpn',
-            new TableForeignKey({
-                columnNames: ['header_id'],
-                referencedColumnNames: ['header_id'],
-                referencedTableName: 'wcs_discrete_header',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183115-wcs_discrete_lpn.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('wcs_discrete_lpn', 'FK_wcs_discrete_lpn_load_number');

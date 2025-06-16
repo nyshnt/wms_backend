@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udda_field20250613105736 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'dda_field',
@@ -97,36 +106,20 @@ export class Udda_field20250613105736 implements MigrationInterface {
         );
 
         // Composite foreign key to DDAMaster
-        await queryRunner.createForeignKey(
-            'dda_field',
-            new TableForeignKey({
-                columnNames: ['dda_id', 'customer_level'],
-                referencedColumnNames: ['dda_id', 'customer_level'], // Assuming these form the composite primary key of dda_master
-                referencedTableName: 'dda_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105736-dda_field.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dda_field',
-            new TableForeignKey({
-                columnNames: ['link_dda_id'],
-                referencedColumnNames: ['dda_id'], // Assuming 'dda_id' is unique/primary in dda_master for this FK
-                referencedTableName: 'dda_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105736-dda_field.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dda_field',
-            new TableForeignKey({
-                columnNames: ['filter_group_id'],
-                referencedColumnNames: ['filter_group_id'], // Assuming 'filter_group_id' is unique/primary in dda_filter_group for this FK
-                referencedTableName: 'dda_filter_group',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105736-dda_field.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('dda_field', 'FK_dda_field_dda_master_composite'); // Generic name for composite FK

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uasset_map_media20250611111209 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'asset_map_media',
@@ -21,15 +30,14 @@ export class Uasset_map_media20250611111209 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey('asset_map_media',
-            new TableForeignKey({
-                columnNames: ['map_detail_id'],
-                referencedColumnNames: ['map_detail_id'],
-                referencedTableName: 'asset_map_detail',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611111209-asset_map_media.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating asset_map_media table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('asset_map_media', 'FK_asset_map_media_asset_map_detail');

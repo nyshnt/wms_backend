@@ -1,7 +1,14 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uarchived_customs_consignment20250610113103 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableExists = await queryRunner.hasTable('archived_customs_consignment');
+        if (tableExists) {
+            console.log('Table archived_customs_consignment already exists, skipping creation');
+            return;
+        }
+
         // Enable UUID extension for PostgreSQL
         await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
@@ -38,59 +45,11 @@ export class Uarchived_customs_consignment20250610113103 implements MigrationInt
             true,
         );
 
-        // Check if warehouses table exists before creating foreign key
-        const warehousesTableExists = await queryRunner.hasTable('warehouses');
-        if (warehousesTableExists) {
-            await queryRunner.createForeignKey(
-                'archived_customs_consignment',
-                new TableForeignKey({
-                    columnNames: ['warehouse_id'],
-                    referencedColumnNames: ['warehouse_id'],
-                    referencedTableName: 'warehouses',
-                    onDelete: 'CASCADE',
-                }),
-            );
-        } else {
-            console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
-        }
-
-        // Check if customs_consignment table exists before creating foreign key
-        const customsConsignmentTableExists = await queryRunner.hasTable('customs_consignment');
-        if (customsConsignmentTableExists) {
-            await queryRunner.createForeignKey(
-                'archived_customs_consignment',
-                new TableForeignKey({
-                    columnNames: ['customs_consignment_id'],
-                    referencedColumnNames: ['customs_consignment_id'],
-                    referencedTableName: 'customs_consignment',
-                    onDelete: 'CASCADE',
-                }),
-            );
-        } else {
-            console.log('Skipping foreign key creation for customs_consignment_id as the customs_consignment table does not exist yet.');
-        }
+        console.log('Created archived_customs_consignment table');
+        console.log('Note: Foreign keys were not created. You should create these foreign keys when making APIs.');
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // Get the table first to check what foreign keys exist
-        const table = await queryRunner.getTable('archived_customs_consignment');
-        
-        // Drop warehouse foreign key if it exists
-        const warehouseForeignKey = table?.foreignKeys.find(fk => 
-            fk.columnNames.indexOf('warehouse_id') !== -1
-        );
-        if (warehouseForeignKey) {
-            await queryRunner.dropForeignKey('archived_customs_consignment', warehouseForeignKey);
-        }
-
-        // Drop customs consignment foreign key if it exists
-        const customsConsignmentForeignKey = table?.foreignKeys.find(fk => 
-            fk.columnNames.indexOf('customs_consignment_id') !== -1
-        );
-        if (customsConsignmentForeignKey) {
-            await queryRunner.dropForeignKey('archived_customs_consignment', customsConsignmentForeignKey);
-        }
-        
         await queryRunner.dropTable('archived_customs_consignment');
     }
 }

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ugrid_view_detail20250612133254 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'grid_view_detail',
@@ -97,34 +106,14 @@ export class Ugrid_view_detail20250612133254 implements MigrationInterface {
         );
 
         // Composite foreign key to GridViewDefinition
-        await queryRunner.createForeignKey(
-            'grid_view_detail',
-            new TableForeignKey({
-                columnNames: [
-                    'level_id',
-                    'application_id',
-                    'form_id',
-                    'addon_id',
-                    'grid_variable_name',
-                    'view_name',
-                    'user_id',
-                    'view_type'
-                ],
-                referencedColumnNames: [
-                    'level_id',
-                    'application_id',
-                    'form_id',
-                    'addon_id',
-                    'grid_variable_name',
-                    'view_name',
-                    'user_id',
-                    'view_type'
-                ], // Assuming these form the composite primary key of grid_view_definition
-                referencedTableName: 'grid_view_definition',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133254-grid_view_detail.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('grid_view_detail', 'FK_grid_view_detail_grid_view_definition'); // Generic name for composite FK

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ureplenishment_slot_profile_link20250611130022 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'replenishment_slot_profile_link',
@@ -29,24 +38,17 @@ export class Ureplenishment_slot_profile_link20250611130022 implements Migration
             true
         );
 
-        await queryRunner.createForeignKey('replenishment_slot_profile_link',
-            new TableForeignKey({
-                columnNames: ['replenishment_reference'],
-                referencedColumnNames: ['replenishment_reference'],
-                referencedTableName: 'replenishment_work',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611130022-replenishment_slot_profile_link.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('replenishment_slot_profile_link',
-            new TableForeignKey({
-                columnNames: ['profile_name'],
-                referencedColumnNames: ['profile_name'],
-                referencedTableName: 'slot_profile_item_set',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611130022-replenishment_slot_profile_link.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('replenishment_slot_profile_link', 'FK_replenishment_slot_profile_link_replenishment_reference');

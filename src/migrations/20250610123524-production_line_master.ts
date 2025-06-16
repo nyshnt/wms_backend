@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uproduction_line_master20250610123524 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -36,15 +36,8 @@ export class Uproduction_line_master20250610123524 implements MigrationInterface
 
             const warehousesTableExists = await queryRunner.hasTable('warehouses');
             if (warehousesTableExists) {
-                await queryRunner.createForeignKey(
-                    'production_line_master',
-                    new TableForeignKey({
-                        columnNames: ['warehouse_id'],
-                        referencedColumnNames: ['warehouse_id'],
-                        referencedTableName: 'warehouses',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610123524-production_line_master.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
             }

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uunavailable_schedule_note20250610122320 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -35,15 +35,8 @@ export class Uunavailable_schedule_note20250610122320 implements MigrationInterf
 
             const workOrderHeaderNoteTableExists = await queryRunner.hasTable('work_order_header_note');
             if (workOrderHeaderNoteTableExists) {
-                await queryRunner.createForeignKey(
-                    'unavailable_schedule_note',
-                    new TableForeignKey({
-                        columnNames: ['note_line_number'],
-                        referencedColumnNames: ['note_line_number'],
-                        referencedTableName: 'work_order_header_note',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610122320-unavailable_schedule_note.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for note_line_number as the work_order_header_note table does not exist yet.');
             }

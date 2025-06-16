@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uasset_master20250612155147 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'asset_master',
@@ -35,26 +44,17 @@ export class Uasset_master20250612155147 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'asset_master',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'], // Assuming 'client_id' is the primary key in 'client' table
-                referencedTableName: 'client',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612155147-asset_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'asset_master',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'], // Assuming 'warehouse_id' is the primary key in 'warehouse' table
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612155147-asset_master.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('asset_master', 'FK_asset_master_client_id');

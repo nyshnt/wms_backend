@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ureturn_detail20250612173413 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'return_detail',
@@ -57,36 +66,20 @@ export class Ureturn_detail20250612173413 implements MigrationInterface {
         );
 
         // Composite foreign key to ReturnHeader
-        await queryRunner.createForeignKey(
-            'return_detail',
-            new TableForeignKey({
-                columnNames: ['rma_number', 'warehouse_id'],
-                referencedColumnNames: ['rma_number', 'warehouse_id'], // Assuming these form the composite primary key of return_header
-                referencedTableName: 'return_header',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612173413-return_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'return_detail',
-            new TableForeignKey({
-                columnNames: ['part_number'],
-                referencedColumnNames: ['part_number'],
-                referencedTableName: 'part_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612173413-return_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'return_detail',
-            new TableForeignKey({
-                columnNames: ['part_client_id'],
-                referencedColumnNames: ['client_id'], // Referenced column is client_id in ClientMaster
-                referencedTableName: 'client_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612173413-return_detail.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('return_detail', 'FK_return_detail_return_header'); // Generic name for composite FK

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uarea_master_receiving_wo20250612183606 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'area_master_receiving_wo',
@@ -31,26 +40,17 @@ export class Uarea_master_receiving_wo20250612183606 implements MigrationInterfa
             true
         );
 
-        await queryRunner.createForeignKey(
-            'area_master_receiving_wo',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183606-area_master_receiving_wo.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'area_master_receiving_wo',
-            new TableForeignKey({
-                columnNames: ['default_receive_inventory_status'],
-                referencedColumnNames: ['inventory_status_code'], // Referenced column is inventory_status_code in InventoryStatusMaster
-                referencedTableName: 'inventory_status_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183606-area_master_receiving_wo.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('area_master_receiving_wo', 'FK_area_master_receiving_wo_warehouse_id');

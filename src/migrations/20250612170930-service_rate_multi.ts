@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uservice_rate_multi20250612170930 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'serstate_mul',
@@ -113,26 +122,17 @@ export class Uservice_rate_multi20250612170930 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'serstate_mul',
-            new TableForeignKey({
-                columnNames: ['service_rate_id'],
-                referencedColumnNames: ['service_rate_id'],
-                referencedTableName: 'service_rate_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FK
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170930-service_rate_multi.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serstate_mul',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE as client_id is not nullable here
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170930-service_rate_multi.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('serstate_mul', 'FK_serstate_mul_service_rate_id');

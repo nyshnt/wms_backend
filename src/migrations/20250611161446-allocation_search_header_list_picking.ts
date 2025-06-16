@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uallocation_search_header_list_picking20250611161446 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'allocation_search_header_list_picking',
@@ -46,27 +55,14 @@ export class Uallocation_search_header_list_picking20250611161446 implements Mig
             true
         );
 
-        await queryRunner.createForeignKeys('allocation_search_header_list_picking', [
-            new TableForeignKey({
-                columnNames: ['area_code'],
-                referencedColumnNames: ['area_code'],
-                referencedTableName: 'area_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'area_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['building_id'],
-                referencedColumnNames: ['building_id'],
-                referencedTableName: 'building_master',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611161446-allocation_search_header_list_picking.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('allocation_search_header_list_picking', 'FK_allocation_search_header_list_picking_area_code');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uunit_of_measure_master_i18n20250613105418 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'unit_of_measure_master_i18n',
@@ -36,26 +45,17 @@ export class Uunit_of_measure_master_i18n20250613105418 implements MigrationInte
             true
         );
 
-        await queryRunner.createForeignKey(
-            'unit_of_measure_master_i18n',
-            new TableForeignKey({
-                columnNames: ['locale_id'],
-                referencedColumnNames: ['locale_id'],
-                referencedTableName: 'locale_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105418-unit_of_measure_master_i18n.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'unit_of_measure_master_i18n',
-            new TableForeignKey({
-                columnNames: ['master_uom_system_fk'],
-                referencedColumnNames: ['master_uom_system_fk'], // Assuming master_uom_system_fk is unique/primary in unit_of_measure_definition
-                referencedTableName: 'unit_of_measure_definition',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105418-unit_of_measure_master_i18n.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('unit_of_measure_master_i18n', 'FK_unit_of_measure_master_i18n_locale_id');

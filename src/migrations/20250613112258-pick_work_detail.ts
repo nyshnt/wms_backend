@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upick_work_detail20250613112258 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'pick_work_detail',
@@ -63,59 +72,29 @@ export class Upick_work_detail20250613112258 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'pick_work_detail',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112258-pick_work_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'pick_work_detail',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112258-pick_work_detail.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to WorkOrderDetail
         // Note: This foreign key does not include 'segment_number' from WorkOrderDetail's primary key.
         // Ensure this aligns with your schema's integrity requirements.
-        await queryRunner.createForeignKey(
-            'pick_work_detail',
-            new TableForeignKey({
-                columnNames: ['work_order_number', 'work_order_revision', 'warehouse_id', 'client_id', 'work_order_line_number'],
-                referencedColumnNames: ['work_order_number', 'work_order_revision', 'warehouse_id', 'client_id', 'work_order_line_number'], // Referenced columns
-                referencedTableName: 'work_order_detail',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112258-pick_work_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'pick_work_detail',
-            new TableForeignKey({
-                columnNames: ['inventory_detail_number'],
-                referencedColumnNames: ['inventory_detail_number'],
-                referencedTableName: 'inventory_detail',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112258-pick_work_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'pick_work_detail',
-            new TableForeignKey({
-                columnNames: ['shipment_line_id'],
-                referencedColumnNames: ['shipment_line_id'],
-                referencedTableName: 'shipment_line',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112258-pick_work_detail.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('pick_work_detail', 'FK_pick_work_detail_warehouse_id');

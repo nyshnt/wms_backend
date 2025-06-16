@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ureceiving_line20250613112516 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'receiving_line',
@@ -129,26 +138,17 @@ export class Ureceiving_line20250613112516 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'receiving_line',
-            new TableForeignKey({
-                columnNames: ['customs_consignment_id'],
-                referencedColumnNames: ['customs_consignment_id'],
-                referencedTableName: 'customs_consignment',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112516-receiving_line.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'receiving_line',
-            new TableForeignKey({
-                columnNames: ['shipment_line_id'],
-                referencedColumnNames: ['shipment_line_id'],
-                referencedTableName: 'shipment_line',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112516-receiving_line.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('receiving_line', 'FK_receiving_line_customs_consignment_id');

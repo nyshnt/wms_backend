@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Umenu_group20250611164947 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Menu_Group',
@@ -42,15 +51,14 @@ export class Umenu_group20250611164947 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey('Menu_Group',
-            new TableForeignKey({
-                columnNames: ['parent_group_id'],
-                referencedColumnNames: ['menu_group_id'],
-                referencedTableName: 'Menu_Group',
-                onDelete: 'SET NULL'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611164947-menu_group.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Menu_Group', 'FK_Menu_Group_parent_group_id');

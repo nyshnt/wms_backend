@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uarchived_compartment_detail20250610183329 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'arc_cmpdtl',
@@ -59,16 +68,14 @@ export class Uarchived_compartment_detail20250610183329 implements MigrationInte
             true
         );
 
-        await queryRunner.createForeignKey('arc_cmpdtl',
-            new TableForeignKey({
-                columnNames: ['compartment_key', 'added_date'],
-                referencedColumnNames: ['compartment_key', 'added_date'],
-                referencedTableName: 'archived_compartment_header',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610183329-archived_compartment_detail.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('arc_cmpdtl', 'FK_arc_cmpdtl_archived_compartment_header');
         await queryRunner.dropTable('arc_cmpdtl');

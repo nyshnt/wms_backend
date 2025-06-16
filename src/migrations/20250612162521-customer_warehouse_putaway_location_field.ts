@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucustomer_warehouse_putaway_location_field20250612162521 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'customer_warehouse_putaway_location_field',
@@ -43,16 +52,14 @@ export class Ucustomer_warehouse_putaway_location_field20250612162521 implements
         );
 
         // Composite foreign key to CustomerWarehousePutawayLocation
-        await queryRunner.createForeignKey(
-            'customer_warehouse_putaway_location_field',
-            new TableForeignKey({
-                columnNames: ['customer_number', 'warehouse_id', 'client_id', 'sort_sequence', 'area_code'],
-                referencedColumnNames: ['customer_number', 'warehouse_id', 'client_id', 'sort_sequence', 'area_code'], // Assuming these form the composite primary key
-                referencedTableName: 'customer_warehouse_putaway_location',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612162521-customer_warehouse_putaway_location_field.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('customer_warehouse_putaway_location_field', 'FK_customer_warehouse_putaway_location_field_composite'); // Generic name for composite FK

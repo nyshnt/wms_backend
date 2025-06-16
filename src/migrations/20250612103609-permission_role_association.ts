@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upermission_role_association20250612103609 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Permission_Role_Association',
@@ -26,21 +35,14 @@ export class Upermission_role_association20250612103609 implements MigrationInte
             true
         );
 
-        await queryRunner.createForeignKeys('Permission_Role_Association', [
-            new TableForeignKey({
-                columnNames: ['permission_id'],
-                referencedColumnNames: ['permission_id'],
-                referencedTableName: 'application_auth_permission',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['role_id'],
-                referencedColumnNames: ['role_id'],
-                referencedTableName: 'application_authorization_role',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612103609-permission_role_association.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Permission_Role_Association', 'FK_Permission_Role_Association_permission_id');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uasset_carton20250613111846 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'asset_carton',
@@ -27,26 +36,17 @@ export class Uasset_carton20250613111846 implements MigrationInterface {
         );
 
         // Composite foreign key to CartonMasterAssetListPicking
-        await queryRunner.createForeignKey(
-            'asset_carton',
-            new TableForeignKey({
-                columnNames: ['carton_code', 'warehouse_id'],
-                referencedColumnNames: ['carton_code', 'warehouse_id'], // Assuming these form the composite primary key of carton_master_asset_list_picking
-                referencedTableName: 'carton_master_asset_list_picking',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613111846-asset_carton.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'asset_carton',
-            new TableForeignKey({
-                columnNames: ['asset_type_id'],
-                referencedColumnNames: ['asset_type_id'],
-                referencedTableName: 'asset_type_asset_list_picking',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613111846-asset_carton.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('asset_carton', 'FK_asset_carton_carton_master_asset_list_picking'); // Generic name for composite FK

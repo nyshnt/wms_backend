@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udefault_service20250612180945 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'def_serv',
@@ -166,126 +175,47 @@ export class Udefault_service20250612180945 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE as client_id is not nullable here
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['part_number', 'part_client_id'],
-                referencedColumnNames: ['part_number', 'part_client_id'], // Assuming these form the composite primary key of part_master
-                referencedTableName: 'part_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as parts are not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['inventory_status'],
-                referencedColumnNames: ['inventory_status'],
-                referencedTableName: 'inventory_status',
-                onDelete: 'CASCADE' // Assuming CASCADE as inventory_status is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['supplier_number'],
-                referencedColumnNames: ['supplier_number'],
-                referencedTableName: 'supplier_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as supplier_number is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['customer_number'],
-                referencedColumnNames: ['customer_number'],
-                referencedTableName: 'customer_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as customer_number is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['service_rate_id'],
-                referencedColumnNames: ['service_rate_id'],
-                referencedTableName: 'service_rate_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as service_rate_id is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['order_number'],
-                referencedColumnNames: ['order_number'],
-                referencedTableName: 'order_header',
-                onDelete: 'CASCADE' // Assuming CASCADE as order_number is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['order_line_number', 'order_subline_number'],
-                referencedColumnNames: ['order_line_number', 'order_subline_number'], // Assuming these form the composite primary key of order_line
-                referencedTableName: 'order_line',
-                onDelete: 'CASCADE' // Assuming CASCADE as order_line_number/subline_number are not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['trailer_type'],
-                referencedColumnNames: ['trailer_type'],
-                referencedTableName: 'trailer_type',
-                onDelete: 'CASCADE' // Assuming CASCADE as trailer_type is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['vehicle_type'],
-                referencedColumnNames: ['vehicle_type'],
-                referencedTableName: 'vehicle_type',
-                onDelete: 'CASCADE' // Assuming CASCADE as vehicle_type is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['address_id'],
-                referencedColumnNames: ['address_id'],
-                referencedTableName: 'address_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as address_id is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'def_serv',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE' // Assuming CASCADE as user_id is not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612180945-default_service.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('def_serv', 'FK_def_serv_client_id');

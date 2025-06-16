@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uaisle_dock_location20250612182857 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'aisle_dock_location',
@@ -56,46 +65,23 @@ export class Uaisle_dock_location20250612182857 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'aisle_dock_location',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612182857-aisle_dock_location.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'aisle_dock_location',
-            new TableForeignKey({
-                columnNames: ['aisle_id'],
-                referencedColumnNames: ['aisle_id'],
-                referencedTableName: 'aisle',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612182857-aisle_dock_location.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'aisle_dock_location',
-            new TableForeignKey({
-                columnNames: ['staging_location'],
-                referencedColumnNames: ['storage_location'], // Referenced column is storage_location in LocationMaster
-                referencedTableName: 'location_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612182857-aisle_dock_location.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'aisle_dock_location',
-            new TableForeignKey({
-                columnNames: ['building_id'],
-                referencedColumnNames: ['building_id'],
-                referencedTableName: 'building_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612182857-aisle_dock_location.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('aisle_dock_location', 'FK_aisle_dock_location_warehouse_id');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uservice_master20250610171955 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'service_master',
@@ -76,21 +85,13 @@ export class Uservice_master20250610171955 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKeys('service_master', [
-            new TableForeignKey({
-                columnNames: ['service_rate_id'],
-                referencedColumnNames: ['service_rate_id'],
-                referencedTableName: 'service_rate_master',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_service_id'],
-                referencedColumnNames: ['service_id'],
-                referencedTableName: 'Warehouse_Service',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610171955-service_master.ts. You should create these foreign keys when making APIs.');
+    }   catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
     }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('service_master', 'FK_service_master_service_rate_id');

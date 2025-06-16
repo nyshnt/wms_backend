@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwork_queue20250610124527 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'work_queue',
@@ -23,20 +32,17 @@ export class Uwork_queue20250610124527 implements MigrationInterface {
 
         const pickWorkHeaderTableExists = await queryRunner.hasTable('pick_work_header');
         if (pickWorkHeaderTableExists) {
-            await queryRunner.createForeignKey(
-                'work_queue',
-                new TableForeignKey({
-                    columnNames: ['work_reference'],
-                    referencedColumnNames: ['work_reference'],
-                    referencedTableName: 'pick_work_header',
-                    onDelete: 'CASCADE',
-                }),
-            );
+            // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610124527-work_queue.ts. You should create these foreign keys when making APIs.');
         } else {
             console.log('Skipping foreign key creation for work_reference as the pick_work_header table does not exist yet.');
         }
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         const table = await queryRunner.getTable('work_queue');
         if (table) {

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ustorage_building_sequence20250610115257 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -27,15 +27,8 @@ export class Ustorage_building_sequence20250610115257 implements MigrationInterf
             // Check if warehouses table exists before creating foreign key
             const warehousesTableExists = await queryRunner.hasTable('warehouses');
             if (warehousesTableExists) {
-                await queryRunner.createForeignKey(
-                    'storage_building_sequence',
-                    new TableForeignKey({
-                        columnNames: ['warehouse_id'],
-                        referencedColumnNames: ['warehouse_id'],
-                        referencedTableName: 'warehouses',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610115257-storage_building_sequence.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
             }

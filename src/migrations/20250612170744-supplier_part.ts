@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Usupplier_part20250612170744 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'supplier_part',
@@ -54,47 +63,24 @@ export class Usupplier_part20250612170744 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'supplier_part',
-            new TableForeignKey({
-                columnNames: ['supplier_number'],
-                referencedColumnNames: ['supplier_number'], // Assuming supplier_number is unique/primary in supplier_master
-                referencedTableName: 'supplier_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170744-supplier_part.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to PartMaster
-        await queryRunner.createForeignKey(
-            'supplier_part',
-            new TableForeignKey({
-                columnNames: ['part_number', 'part_client_id'],
-                referencedColumnNames: ['part_number', 'part_client_id'], // Assuming these form the composite primary key of part_master
-                referencedTableName: 'part_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170744-supplier_part.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'supplier_part',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170744-supplier_part.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'supplier_part',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170744-supplier_part.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('supplier_part', 'FK_supplier_part_supplier_number');

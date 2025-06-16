@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udashboard_tab_module_configuration20250613105859 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'dashboard_tab_module_configuration',
@@ -56,26 +65,17 @@ export class Udashboard_tab_module_configuration20250613105859 implements Migrat
             true
         );
 
-        await queryRunner.createForeignKey(
-            'dashboard_tab_module_configuration',
-            new TableForeignKey({
-                columnNames: ['module_id'],
-                referencedColumnNames: ['module_id'], // Assuming module_id is unique/primary in dashboard_module_definition
-                referencedTableName: 'dashboard_module_definition',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105859-dashboard_tab_module_configuration.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'dashboard_tab_module_configuration',
-            new TableForeignKey({
-                columnNames: ['tab_id'],
-                referencedColumnNames: ['tab_id'],
-                referencedTableName: 'dashboard_tabs',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613105859-dashboard_tab_module_configuration.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('dashboard_tab_module_configuration', 'FK_dashboard_tab_module_configuration_module_id');

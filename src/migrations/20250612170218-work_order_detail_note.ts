@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwork_order_detail_note20250612170218 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'work_order_detail_note',
@@ -47,41 +56,18 @@ export class Uwork_order_detail_note20250612170218 implements MigrationInterface
         );
 
         // Composite foreign key to WorkOrderDetail
-        await queryRunner.createForeignKey(
-            'work_order_detail_note',
-            new TableForeignKey({
-                columnNames: [
-                    'work_order_number',
-                    'work_order_revision',
-                    'warehouse_id',
-                    'client_id',
-                    'work_order_line_number',
-                    'segment_number'
-                ],
-                referencedColumnNames: [
-                    'work_order_number',
-                    'work_order_revision',
-                    'warehouse_id',
-                    'client_id',
-                    'work_order_line_number',
-                    'segment_number'
-                ], // Assuming these form the composite primary key of work_order_detail
-                referencedTableName: 'work_order_detail',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170218-work_order_detail_note.ts. You should create these foreign keys when making APIs.');
 
         // Foreign key to Client table (client_id)
-        await queryRunner.createForeignKey(
-            'work_order_detail_note',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE since client_id is a primary column
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612170218-work_order_detail_note.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('work_order_detail_note', 'FK_work_order_detail_note_work_order_detail'); // Generic name for composite FK

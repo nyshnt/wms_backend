@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uinventory_detail_asset_list_picking20250613115102 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'inventory_detail_asset_list_picking',
@@ -51,26 +60,17 @@ export class Uinventory_detail_asset_list_picking20250613115102 implements Migra
             true
         );
 
-        await queryRunner.createForeignKey(
-            'inventory_detail_asset_list_picking',
-            new TableForeignKey({
-                columnNames: ['sub_detail_number'],
-                referencedColumnNames: ['sub_detail_number'], // Assuming sub_detail_number is unique/primary in inventory_sub_detail_asset_list_picking
-                referencedTableName: 'inventory_sub_detail_asset_list_picking',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613115102-inventory_detail_asset_list_picking.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'inventory_detail_asset_list_picking',
-            new TableForeignKey({
-                columnNames: ['work_reference_detail_id'],
-                referencedColumnNames: ['work_reference_detail_id'],
-                referencedTableName: 'pick_work_detail_asset_list_picking',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613115102-inventory_detail_asset_list_picking.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('inventory_detail_asset_list_picking', 'FK_inventory_detail_asset_list_picking_sub_detail_number');

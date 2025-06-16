@@ -2,6 +2,15 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwork_order_header20250610105249 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         // Enable UUID extension for PostgreSQL
         await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
@@ -107,7 +116,11 @@ export class Uwork_order_header20250610105249 implements MigrationInterface {
         // We'll need to create this foreign key in a separate migration after the customs_consignment table is created
         console.log('Skipping foreign key creation for customs_consignment_id as the referenced table does not exist yet.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         // Drop the foreign key if it exists
         const table = await queryRunner.getTable('wkohdr');

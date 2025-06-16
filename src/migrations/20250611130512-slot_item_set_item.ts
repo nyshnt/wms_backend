@@ -2,6 +2,15 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uslot_item_set_item20250611130512 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'slot_item_set_item',
@@ -31,6 +40,11 @@ export class Uslot_item_set_item20250611130512 implements MigrationInterface {
             true
         );
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('slot_item_set_item');

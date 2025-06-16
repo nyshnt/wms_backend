@@ -2,6 +2,15 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uexpected_asset20250611105956 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'expected_asset',
@@ -42,6 +51,11 @@ export class Uexpected_asset20250611105956 implements MigrationInterface {
             true
         );
     }
+    catch (error) {
+        console.error('Error creating expected_asset table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('expected_asset');

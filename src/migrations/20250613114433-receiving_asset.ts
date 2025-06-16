@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ureceiving_asset20250613114433 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'receiving_asset',
@@ -66,56 +75,26 @@ export class Ureceiving_asset20250613114433 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'receiving_asset',
-            new TableForeignKey({
-                columnNames: ['asset_id'],
-                referencedColumnNames: ['asset_id'],
-                referencedTableName: 'service_asset',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114433-receiving_asset.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'receiving_asset',
-            new TableForeignKey({
-                columnNames: ['asset_type'],
-                referencedColumnNames: ['asset_type_id'],
-                referencedTableName: 'asset_type',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114433-receiving_asset.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'receiving_asset',
-            new TableForeignKey({
-                columnNames: ['source_address_id'],
-                referencedColumnNames: ['address_id'],
-                referencedTableName: 'address_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114433-receiving_asset.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'receiving_asset',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114433-receiving_asset.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'receiving_asset',
-            new TableForeignKey({
-                columnNames: ['asset_status'],
-                referencedColumnNames: ['asset_status'],
-                referencedTableName: 'non_service_asset',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114433-receiving_asset.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('receiving_asset', 'FK_receiving_asset_asset_id');

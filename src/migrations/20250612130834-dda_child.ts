@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udda_child20250612130834 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'dda_child',
@@ -62,16 +71,14 @@ export class Udda_child20250612130834 implements MigrationInterface {
         );
 
         // Composite foreign key to DDAMaster
-        await queryRunner.createForeignKey(
-            'dda_child',
-            new TableForeignKey({
-                columnNames: ['dda_id', 'customer_level'],
-                referencedColumnNames: ['dda_id', 'customer_level'],
-                referencedTableName: 'dda_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612130834-dda_child.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('dda_child', 'FK_dda_child_dda_id_customer_level'); // Generic name for composite FK

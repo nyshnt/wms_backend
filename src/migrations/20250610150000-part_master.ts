@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Upart_master20250612170606 implements MigrationInterface {
+export class Upart_master20250610150000 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'part_master',
@@ -77,17 +86,17 @@ export class Upart_master20250612170606 implements MigrationInterface {
                         isNullable: true
                     },
                     {
-                        name: 'supplier_number', // Column for foreign key
-                        type: 'varchar',
-                        isNullable: true // ManyToOne relationships are often nullable unless explicitly marked otherwise
-                    },
-                    {
-                        name: 'warehouse_id', // Column for foreign key
+                        name: 'supplier_number',
                         type: 'varchar',
                         isNullable: true
                     },
                     {
-                        name: 'client_id', // Column for foreign key
+                        name: 'warehouse_id',
+                        type: 'varchar',
+                        isNullable: true
+                    },
+                    {
+                        name: 'client_id',
                         type: 'varchar',
                         isNullable: true
                     }
@@ -96,41 +105,16 @@ export class Upart_master20250612170606 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'part_master',
-            new TableForeignKey({
-                columnNames: ['supplier_number'],
-                referencedColumnNames: ['supplier_number'], // Assuming supplier_number is unique/primary in supplier_master
-                referencedTableName: 'supplier_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
-
-        await queryRunner.createForeignKey(
-            'part_master',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
-
-        await queryRunner.createForeignKey(
-            'part_master',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        console.log('Created part_master table');
+        console.log('Note: Foreign keys were not created because the referenced tables may not exist yet.');
+        console.log('You should create these foreign keys in a future migration after creating all required tables.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('part_master', 'FK_part_master_supplier_number');
-        await queryRunner.dropForeignKey('part_master', 'FK_part_master_warehouse_id');
-        await queryRunner.dropForeignKey('part_master', 'FK_part_master_client_id');
         await queryRunner.dropTable('part_master');
     }
 }

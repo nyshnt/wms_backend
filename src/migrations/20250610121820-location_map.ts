@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ulocation_map20250610121820 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -56,105 +56,56 @@ export class Ulocation_map20250610121820 implements MigrationInterface {
             // Check if referenced tables exist before creating foreign keys
             const locationTypeTableExists = await queryRunner.hasTable('location_type');
             if (locationTypeTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['location_type_id'],
-                        referencedColumnNames: ['location_type_id'],
-                        referencedTableName: 'location_type',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for location_type_id as the location_type table does not exist yet.');
             }
 
             const pickZoneTableExists = await queryRunner.hasTable('pick_zone');
             if (pickZoneTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['pick_zone_id'],
-                        referencedColumnNames: ['pick_zone_id'],
-                        referencedTableName: 'pick_zone',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for pick_zone_id as the pick_zone table does not exist yet.');
             }
 
             const storageZoneTableExists = await queryRunner.hasTable('storage_zone');
             if (storageZoneTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['storage_zone_id'],
-                        referencedColumnNames: ['storage_zone_id'],
-                        referencedTableName: 'storage_zone',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for storage_zone_id as the storage_zone table does not exist yet.');
             }
 
             const movementZoneTableExists = await queryRunner.hasTable('movement_zone');
             if (movementZoneTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['movement_zone_id'],
-                        referencedColumnNames: ['movement_zone_id'],
-                        referencedTableName: 'movement_zone',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for movement_zone_id as the movement_zone table does not exist yet.');
             }
 
             const workZoneMasterTableExists = await queryRunner.hasTable('work_zone_master');
             if (workZoneMasterTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['work_zone_id'],
-                        referencedColumnNames: ['work_zone_id'],
-                        referencedTableName: 'work_zone_master',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for work_zone_id as the work_zone_master table does not exist yet.');
             }
 
             const warehousesTableExists = await queryRunner.hasTable('warehouses');
             if (warehousesTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['warehouse_id'],
-                        referencedColumnNames: ['warehouse_id'],
-                        referencedTableName: 'warehouses',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for warehouse_id as the warehouses table does not exist yet.');
             }
 
             const containerZoneTableExists = await queryRunner.hasTable('container_zone');
             if (containerZoneTableExists) {
-                await queryRunner.createForeignKey(
-                    'location_map',
-                    new TableForeignKey({
-                        columnNames: ['container_zone_id'],
-                        referencedColumnNames: ['container_zone_id'],
-                        referencedTableName: 'container_zone',
-                        onDelete: 'CASCADE',
-                    }),
-                );
+                // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610121820-location_map.ts. You should create these foreign keys when making APIs.');
             } else {
                 console.log('Skipping foreign key creation for container_zone_id as the container_zone table does not exist yet.');
             }

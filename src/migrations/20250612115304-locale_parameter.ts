@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ulocale_parameter20250612115304 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Locale_Parameter',
@@ -116,27 +125,14 @@ export class Ulocale_parameter20250612115304 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('Locale_Parameter', [
-            new TableForeignKey({
-                columnNames: ['locale_id'],
-                referencedColumnNames: ['locale_id'],
-                referencedTableName: 'locale_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['currency_code'],
-                referencedColumnNames: ['currency_code'],
-                referencedTableName: 'currency_master_i18n',
-                onDelete: 'SET NULL'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612115304-locale_parameter.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Locale_Parameter', 'FK_Locale_Parameter_locale_id');

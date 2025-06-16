@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uconfirm_inventory_service20250613110542 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'cnfrm_inv_serv',
@@ -156,108 +165,43 @@ export class Uconfirm_inventory_service20250613110542 implements MigrationInterf
             true
         );
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['service_id'],
-                referencedColumnNames: ['service_id'],
-                referencedTableName: 'service_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['supplier_number'],
-                referencedColumnNames: ['supplier_number'],
-                referencedTableName: 'supplier_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['inventory_status'],
-                referencedColumnNames: ['inventory_status'],
-                referencedTableName: 'inventory_status',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to PartMaster
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['part_number', 'part_client_id'],
-                referencedColumnNames: ['part_number', 'part_client_id'], // Assuming these form the composite primary key of part_master
-                referencedTableName: 'part_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['order_number'],
-                referencedColumnNames: ['order_number'],
-                referencedTableName: 'order_header',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to OrderLine
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['order_line_number', 'order_subline_number'],
-                referencedColumnNames: ['order_line_number', 'order_subline_number'], // Assuming these form the composite primary key of order_line
-                referencedTableName: 'order_line',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['shipment_id'],
-                referencedColumnNames: ['shipment_id'],
-                referencedTableName: 'shipment_header',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cnfrm_inv_serv',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110542-confirm_inventory_service.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('cnfrm_inv_serv', 'FK_cnfrm_inv_serv_warehouse_id');

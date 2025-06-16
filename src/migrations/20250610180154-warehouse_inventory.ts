@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwarehouse_inventory20250610180154 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'wh_inv',
@@ -78,16 +87,14 @@ export class Uwarehouse_inventory20250610180154 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey('wh_inv',
-            new TableForeignKey({
-                columnNames: ['confirm_service_id'],
-                referencedColumnNames: ['confirm_service_id'],
-                referencedTableName: 'confirm_service',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610180154-warehouse_inventory.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('wh_inv', 'FK_wh_inv_confirm_service');
         await queryRunner.dropTable('wh_inv');

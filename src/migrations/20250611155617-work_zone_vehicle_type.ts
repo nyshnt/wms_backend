@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwork_zone_vehicle_type20250611155617 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'work_zone_vehicle_type',
@@ -56,39 +65,14 @@ export class Uwork_zone_vehicle_type20250611155617 implements MigrationInterface
             true
         );
 
-        await queryRunner.createForeignKeys('work_zone_vehicle_type', [
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'zone_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['work_zone_code'],
-                referencedColumnNames: ['work_zone_code'],
-                referencedTableName: 'zone_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['vehicle_type_id'],
-                referencedColumnNames: ['vehicle_type_id'],
-                referencedTableName: 'vehicle_type',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['insert_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['last_update_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611155617-work_zone_vehicle_type.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('work_zone_vehicle_type', 'FK_work_zone_vehicle_type_warehouse_id');

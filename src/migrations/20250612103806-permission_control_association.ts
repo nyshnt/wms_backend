@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upermission_control_association20250612103806 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Permission_Control_Association',
@@ -51,33 +60,14 @@ export class Upermission_control_association20250612103806 implements MigrationI
             true
         );
 
-        await queryRunner.createForeignKeys('Permission_Control_Association', [
-            new TableForeignKey({
-                columnNames: ['permission_id'],
-                referencedColumnNames: ['permission_id'],
-                referencedTableName: 'application_auth_permission',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['role_id'],
-                referencedColumnNames: ['role_id'],
-                referencedTableName: 'application_authorization_role',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['application_id'],
-                referencedColumnNames: ['application_id'],
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612103806-permission_control_association.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Permission_Control_Association', 'FK_Permission_Control_Association_permission_id');

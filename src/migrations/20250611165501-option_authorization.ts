@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uoption_authorization20250611165501 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Option_Authorization',
@@ -36,27 +45,14 @@ export class Uoption_authorization20250611165501 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('Option_Authorization', [
-            new TableForeignKey({
-                columnNames: ['option_name'],
-                referencedColumnNames: ['option_name'],
-                referencedTableName: 'menu_option',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['role_id'],
-                referencedColumnNames: ['role_id'],
-                referencedTableName: 'application_auth_role',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611165501-option_authorization.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Option_Authorization', 'FK_Option_Authorization_option_name');

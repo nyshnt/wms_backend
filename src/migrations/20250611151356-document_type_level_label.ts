@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udocument_type_level_label20250611151356 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'document_type_level_label',
@@ -46,33 +55,20 @@ export class Udocument_type_level_label20250611151356 implements MigrationInterf
             true
         );
 
-        await queryRunner.createForeignKey('document_type_level_label',
-            new TableForeignKey({
-                columnNames: ['document_type_code'],
-                referencedColumnNames: ['document_type_code'],
-                referencedTableName: 'document_type_label',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151356-document_type_level_label.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('document_type_level_label',
-            new TableForeignKey({
-                columnNames: ['insert_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151356-document_type_level_label.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('document_type_level_label',
-            new TableForeignKey({
-                columnNames: ['last_update_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151356-document_type_level_label.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating document_type_level_label table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('document_type_level_label', 'FK_document_type_level_label_document_type_code');

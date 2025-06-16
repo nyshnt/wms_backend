@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udistribution_type20250612175657 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'distribution_type',
@@ -29,26 +38,17 @@ export class Udistribution_type20250612175657 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'distribution_type',
-            new TableForeignKey({
-                columnNames: ['distribution_rule_set'],
-                referencedColumnNames: ['rule_set'], // Assuming rule_set is unique/primary in rule_set_command
-                referencedTableName: 'rule_set_command',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612175657-distribution_type.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'distribution_type',
-            new TableForeignKey({
-                columnNames: ['overage_rule_set'],
-                referencedColumnNames: ['rule_set'], // Assuming rule_set is unique/primary in rule_set_command
-                referencedTableName: 'rule_set_command',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612175657-distribution_type.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('distribution_type', 'FK_distribution_type_distribution_rule_set');

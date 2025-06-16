@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ugrid_display_rule20250612133030 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'grid_display_rule',
@@ -122,26 +131,17 @@ export class Ugrid_display_rule20250612133030 implements MigrationInterface {
         );
 
         // Composite foreign key to GridDefinition
-        await queryRunner.createForeignKey(
-            'grid_display_rule',
-            new TableForeignKey({
-                columnNames: ['application_id', 'form_id', 'level_id', 'grid_name'],
-                referencedColumnNames: ['application_id', 'form_id', 'level_id', 'grid_name'], // Assuming these form the composite primary key of grid_definition
-                referencedTableName: 'grid_definition',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133030-grid_display_rule.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'grid_display_rule',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133030-grid_display_rule.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('grid_display_rule', 'FK_grid_display_rule_grid_definition'); // Generic name for composite FK

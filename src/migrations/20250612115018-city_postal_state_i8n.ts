@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucity_postal_state_i8n20250612115018 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'City_Postal_State_I18N',
@@ -71,21 +80,14 @@ export class Ucity_postal_state_i8n20250612115018 implements MigrationInterface 
             true
         );
 
-        await queryRunner.createForeignKeys('City_Postal_State_I18N', [
-            new TableForeignKey({
-                columnNames: ['country_name'],
-                referencedColumnNames: ['country_name'],
-                referencedTableName: 'country_master_i18n',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['state_code'],
-                referencedColumnNames: ['state_code'],
-                referencedTableName: 'state_master_i18n',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612115018-city_postal_state_i8n.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('City_Postal_State_I18N', 'FK_City_Postal_State_I18N_country_name');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwarehouse_customer_master20250612161410 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'warehouse_customer_master',
@@ -31,36 +40,20 @@ export class Uwarehouse_customer_master20250612161410 implements MigrationInterf
             true
         );
 
-        await queryRunner.createForeignKey(
-            'warehouse_customer_master',
-            new TableForeignKey({
-                columnNames: ['customer_number'],
-                referencedColumnNames: ['customer_number'], // Assuming 'customer_number' is unique/primary in 'customer_master'
-                referencedTableName: 'customer_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612161410-warehouse_customer_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'warehouse_customer_master',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'], // Assuming 'warehouse_id' is unique/primary in 'warehouse'
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612161410-warehouse_customer_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'warehouse_customer_master',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'], // Assuming 'client_id' is unique/primary in 'client'
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612161410-warehouse_customer_master.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('warehouse_customer_master', 'FK_warehouse_customer_master_customer_number');

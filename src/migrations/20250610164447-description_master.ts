@@ -1,70 +1,67 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Udescription_master20250610164447 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'description_master',
                 columns: [
                     {
-                        name: 'column_name',
-                        type: 'varchar',
-                        isPrimary: true,
-                    },
-                    {
-                        name: 'column_value',
+                        name: 'description_id',
                         type: 'varchar',
                         isPrimary: true,
                     },
                     {
                         name: 'locale_id',
                         type: 'varchar',
+                        isPrimary: true,
                     },
                     {
-                        name: 'long_description',
-                        type: 'text',
+                        name: 'description_type',
+                        type: 'varchar',
+                        isPrimary: true,
+                    },
+                    {
+                        name: 'description_text',
+                        type: 'varchar',
+                        length: '4000',
                         isNullable: true,
                     },
                     {
-                        name: 'short_description',
+                        name: 'modified_date',
+                        type: 'timestamp',
+                        isNullable: true,
+                    },
+                    {
+                        name: 'modified_user_id',
                         type: 'varchar',
                         length: '255',
                         isNullable: true,
-                    },
-                    {
-                        name: 'group_name',
-                        type: 'varchar',
-                        length: '255',
-                        isNullable: true,
-                    },
-                    {
-                        name: 'warehouse_id',
-                        type: 'varchar',
                     },
                 ],
             }),
             true,
         );
 
-        await queryRunner.createForeignKeys('description_master', [
-            new TableForeignKey({
-                columnNames: ['locale_id'],
-                referencedColumnNames: ['locale_id'],
-                referencedTableName: 'locale_master',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        console.log('Created description_master table');
+        console.log('Note: Foreign key to locale_master was not created because the table does not exist yet.');
+        console.log('You should create this foreign key in a future migration after creating the locale_master table.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('description_master', 'FK_description_master_locale_id');
-        await queryRunner.dropForeignKey('description_master', 'FK_description_master_warehouse_id');
         await queryRunner.dropTable('description_master');
     }
 }

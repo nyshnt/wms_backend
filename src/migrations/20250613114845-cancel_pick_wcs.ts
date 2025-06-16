@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucancel_pick_wcs20250613114845 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'cancel_pick_wcs',
@@ -41,26 +50,17 @@ export class Ucancel_pick_wcs20250613114845 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'cancel_pick_wcs',
-            new TableForeignKey({
-                columnNames: ['work_reference'],
-                referencedColumnNames: ['work_reference'],
-                referencedTableName: 'pick_work_header',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114845-cancel_pick_wcs.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'cancel_pick_wcs',
-            new TableForeignKey({
-                columnNames: ['work_reference_detail_id'],
-                referencedColumnNames: ['work_reference_detail_id'],
-                referencedTableName: 'pick_work_detail',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613114845-cancel_pick_wcs.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('cancel_pick_wcs', 'FK_cancel_pick_wcs_work_reference');

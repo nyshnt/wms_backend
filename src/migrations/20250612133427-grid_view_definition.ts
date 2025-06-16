@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ugrid_view_definition20250612133427 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'grid_view_definition',
@@ -67,39 +76,23 @@ export class Ugrid_view_definition20250612133427 implements MigrationInterface {
         );
 
         // Composite foreign key to GridDefinition
-        await queryRunner.createForeignKey(
-            'grid_view_definition',
-            new TableForeignKey({
-                columnNames: ['level_id', 'application_id', 'form_id', 'addon_id'],
-                referencedColumnNames: ['level_id', 'application_id', 'form_id', 'addon_id'], // Assuming these form the composite primary key of grid_definition
-                referencedTableName: 'grid_definition',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133427-grid_view_definition.ts. You should create these foreign keys when making APIs.');
 
         // Separate foreign key for grid_variable_name to GridDefinition
         // Note: This assumes 'grid_variable_name' is a unique or primary key in 'grid_definition'
         // or that it forms part of a valid foreign key relationship as per your schema.
-        await queryRunner.createForeignKey(
-            'grid_view_definition',
-            new TableForeignKey({
-                columnNames: ['grid_variable_name'],
-                referencedColumnNames: ['grid_variable_name'], // Assuming grid_variable_name is unique/primary in grid_definition
-                referencedTableName: 'grid_definition',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133427-grid_view_definition.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'grid_view_definition',
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_authentication',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133427-grid_view_definition.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('grid_view_definition', 'FK_grid_view_definition_composite_grid_definition'); // Generic name for composite FK

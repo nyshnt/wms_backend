@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uvoice_region_detail20250611151159 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'voice_region_detail',
@@ -66,51 +75,26 @@ export class Uvoice_region_detail20250611151159 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey('voice_region_detail',
-            new TableForeignKey({
-                columnNames: ['region_number'],
-                referencedColumnNames: ['region_number'],
-                referencedTableName: 'voice_region',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151159-voice_region_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('voice_region_detail',
-            new TableForeignKey({
-                columnNames: ['voice_validation_function'],
-                referencedColumnNames: ['voice_validation_function'],
-                referencedTableName: 'voice_region',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151159-voice_region_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('voice_region_detail',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'voice_region',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151159-voice_region_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('voice_region_detail',
-            new TableForeignKey({
-                columnNames: ['insert_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151159-voice_region_detail.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('voice_region_detail',
-            new TableForeignKey({
-                columnNames: ['last_update_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611151159-voice_region_detail.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('voice_region_detail', 'FK_voice_region_detail_region_number');

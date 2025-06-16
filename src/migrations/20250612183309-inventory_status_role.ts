@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uinventory_status_role20250612183309 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'inventory_status_role',
@@ -51,56 +60,26 @@ export class Uinventory_status_role20250612183309 implements MigrationInterface 
             true
         );
 
-        await queryRunner.createForeignKey(
-            'inventory_status_role',
-            new TableForeignKey({
-                columnNames: ['role_id'],
-                referencedColumnNames: ['role_id'],
-                referencedTableName: 'application_authorization_role',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183309-inventory_status_role.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'inventory_status_role',
-            new TableForeignKey({
-                columnNames: ['from_inventory_status'],
-                referencedColumnNames: ['inventory_status_code'], // Referenced column is inventory_status_code in InventoryStatusMaster
-                referencedTableName: 'inventory_status_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183309-inventory_status_role.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'inventory_status_role',
-            new TableForeignKey({
-                columnNames: ['to_inventory_status'],
-                referencedColumnNames: ['inventory_status_code'], // Referenced column is inventory_status_code in InventoryStatusMaster
-                referencedTableName: 'inventory_status_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183309-inventory_status_role.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'inventory_status_role',
-            new TableForeignKey({
-                columnNames: ['insert_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183309-inventory_status_role.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'inventory_status_role',
-            new TableForeignKey({
-                columnNames: ['modification_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612183309-inventory_status_role.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('inventory_status_role', 'FK_inventory_status_role_role_id');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucompartment_header20250613112655 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'compartment_header',
@@ -31,27 +40,18 @@ export class Ucompartment_header20250613112655 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'compartment_header',
-            new TableForeignKey({
-                columnNames: ['client_id'],
-                referencedColumnNames: ['client_id'],
-                referencedTableName: 'client',
-                onDelete: 'CASCADE' // Assuming CASCADE as client_id is not nullable here
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112655-compartment_header.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to WorkOrderHeader
-        await queryRunner.createForeignKey(
-            'compartment_header',
-            new TableForeignKey({
-                columnNames: ['work_order_number', 'work_order_revision'],
-                referencedColumnNames: ['work_order_number', 'work_order_revision'], // Assuming these form the composite primary key of work_order_header
-                referencedTableName: 'work_order_header',
-                onDelete: 'CASCADE' // Assuming CASCADE as work_order_number and work_order_revision are not nullable
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613112655-compartment_header.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('compartment_header', 'FK_compartment_header_client_id');

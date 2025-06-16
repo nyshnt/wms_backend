@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uorder_type_pick_flags20250611164005 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'order_type_pick_flags',
@@ -99,21 +108,14 @@ export class Uorder_type_pick_flags20250611164005 implements MigrationInterface 
             true
         );
 
-        await queryRunner.createForeignKeys('order_type_pick_flags', [
-            new TableForeignKey({
-                columnNames: ['order_type_code'],
-                referencedColumnNames: ['order_type_code'],
-                referencedTableName: 'order_type_rf_pick_validation',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'order_type_rf_pick_validation',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611164005-order_type_pick_flags.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('order_type_pick_flags', 'FK_order_type_pick_flags_order_type_code');

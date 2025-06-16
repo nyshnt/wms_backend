@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upick_work_header_asset_list_picking20250613113952 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'pick_work_header_asset_list_picking',
@@ -71,26 +80,17 @@ export class Upick_work_header_asset_list_picking20250613113952 implements Migra
             true
         );
 
-        await queryRunner.createForeignKey(
-            'pick_work_header_asset_list_picking',
-            new TableForeignKey({
-                columnNames: ['pick_list_id'],
-                referencedColumnNames: ['pick_list_id'],
-                referencedTableName: 'pick_list_asset_list_picking',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613113952-pick_work_header_asset_list_picking.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'pick_work_header_asset_list_picking',
-            new TableForeignKey({
-                columnNames: ['asset_slot_id'],
-                referencedColumnNames: ['asset_slot_id'],
-                referencedTableName: 'pick_list_asset_slot_definition',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613113952-pick_work_header_asset_list_picking.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('pick_work_header_asset_list_picking', 'FK_pick_work_header_asset_list_picking_pick_list_id');

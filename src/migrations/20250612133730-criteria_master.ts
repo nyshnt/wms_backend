@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ucriteria_master20250612133730 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'criteria_master',
@@ -47,16 +56,14 @@ export class Ucriteria_master20250612133730 implements MigrationInterface {
         );
 
         // Composite foreign key to ProfileMaster
-        await queryRunner.createForeignKey(
-            'criteria_master',
-            new TableForeignKey({
-                columnNames: ['application_id', 'form_id', 'profile_name'],
-                referencedColumnNames: ['application_id', 'form_id', 'profile_name'], // Assuming these form the composite primary key of profile_master
-                referencedTableName: 'profile_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133730-criteria_master.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('criteria_master', 'FK_criteria_master_profile_master'); // Generic name for composite FK

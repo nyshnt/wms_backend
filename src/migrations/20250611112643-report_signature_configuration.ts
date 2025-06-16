@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ureport_signature_configuration20250611112643 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'report_signature_configuration',
@@ -41,15 +50,14 @@ export class Ureport_signature_configuration20250611112643 implements MigrationI
             true
         );
 
-        await queryRunner.createForeignKey('report_signature_configuration',
-            new TableForeignKey({
-                columnNames: ['report_id'],
-                referencedColumnNames: ['report_id'],
-                referencedTableName: 'report_configuration',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611112643-report_signature_configuration.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating report_signature_configuration table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('report_signature_configuration', 'FK_report_signature_configuration_report_configuration');

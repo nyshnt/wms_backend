@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ugrid_definition20250612133149 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'grid_definition',
@@ -79,36 +88,20 @@ export class Ugrid_definition20250612133149 implements MigrationInterface {
         // Note: The foreign key for 'parent_level_id' references 'level_id' in 'grid_definition'.
         // If 'grid_definition' has a composite primary key, ensure 'level_id' alone is unique
         // or consider a composite foreign key if the parent relationship involves the full primary key.
-        await queryRunner.createForeignKey(
-            'grid_definition',
-            new TableForeignKey({
-                columnNames: ['parent_level_id'],
-                referencedColumnNames: ['level_id'], // Assuming 'level_id' is uniquely referenced
-                referencedTableName: 'grid_definition',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133149-grid_definition.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'grid_definition',
-            new TableForeignKey({
-                columnNames: ['application_id'],
-                referencedColumnNames: ['application_id'], // Assuming application_id is unique/primary in workflow_application
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133149-grid_definition.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'grid_definition',
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'], // Assuming form_id is unique/primary in workflow_form
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612133149-grid_definition.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('grid_definition', 'FK_grid_definition_parent_level_id');

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Ustop_location20250610113739 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         // Enable UUID extension for PostgreSQL
         await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
@@ -35,20 +44,17 @@ export class Ustop_location20250610113739 implements MigrationInterface {
         // Check if carrier_move table exists before creating foreign key
         const carrierMoveTableExists = await queryRunner.hasTable('carrier_move');
         if (carrierMoveTableExists) {
-            await queryRunner.createForeignKey(
-                'stop_location',
-                new TableForeignKey({
-                    columnNames: ['carrier_move_id'],
-                    referencedColumnNames: ['carrier_move_id'],
-                    referencedTableName: 'carrier_move',
-                    onDelete: 'CASCADE',
-                }),
-            );
+            // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610113739-stop_location.ts. You should create these foreign keys when making APIs.');
         } else {
             console.log('Skipping foreign key creation for carrier_move_id as the carrier_move table does not exist yet.');
         }
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         // Get the table first to check what foreign keys exist
         const table = await queryRunner.getTable('stop_location');

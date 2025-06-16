@@ -406,6 +406,7 @@ export class InventorySubLocation {
 
 export class LocationMaster {
     area_code: string;
+    location_id: string;
     stock_location: string;
     storage_location: string;
     warehouse_id: string;

@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uservice_instance20250610172553 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'service_instance',
@@ -53,28 +62,14 @@ export class Uservice_instance20250610172553 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('service_instance', [
-            new TableForeignKey({
-                columnNames: ['service_id'],
-                referencedColumnNames: ['service_id'],
-                referencedTableName: 'service_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['service_rate_id'],
-                referencedColumnNames: ['service_rate_id'],
-                referencedTableName: 'service_rate_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['confirm_service_id'],
-                referencedColumnNames: ['confirm_service_id'],
-                referencedTableName: 'confirm_service',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610172553-service_instance.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('service_instance', 'FK_service_instance_service_master');
         await queryRunner.dropForeignKey('service_instance', 'FK_service_instance_service_rate_master');

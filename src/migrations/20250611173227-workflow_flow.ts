@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uworkflow_flow20250611173227 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Workflow_Flow',
@@ -36,45 +45,14 @@ export class Uworkflow_flow20250611173227 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('Workflow_Flow', [
-            new TableForeignKey({
-                columnNames: ['application_id', 'customer_level'],
-                referencedColumnNames: ['application_id', 'customer_level'],
-                referencedTableName: 'workflow_application',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['next_form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['previous_form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['home_form_id'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['form_id_command'],
-                referencedColumnNames: ['form_id'],
-                referencedTableName: 'workflow_form',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611173227-workflow_flow.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Workflow_Flow', 'FK_Workflow_Flow_application_id_customer_level');

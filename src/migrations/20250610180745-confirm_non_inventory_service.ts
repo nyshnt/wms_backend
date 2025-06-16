@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uconfirm_non_inventory_service20250610180745 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'cnfrm_noninv_serv',
@@ -128,58 +137,14 @@ export class Uconfirm_non_inventory_service20250610180745 implements MigrationIn
             true
         );
 
-        await queryRunner.createForeignKeys('cnfrm_noninv_serv', [
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['service_id'],
-                referencedColumnNames: ['service_id'],
-                referencedTableName: 'service_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['trailer_type'],
-                referencedColumnNames: ['trailer_type'],
-                referencedTableName: 'trailer_type',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['vehicle_type'],
-                referencedColumnNames: ['vehicle_type'],
-                referencedTableName: 'vehicle_type',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['order_number'],
-                referencedColumnNames: ['order_number'],
-                referencedTableName: 'order_header',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['order_line_number', 'order_subline_number'],
-                referencedColumnNames: ['order_line_number', 'order_subline_number'],
-                referencedTableName: 'order_line',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['address_id'],
-                referencedColumnNames: ['address_id'],
-                referencedTableName: 'address_master',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610180745-confirm_non_inventory_service.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('cnfrm_noninv_serv', 'FK_cnfrm_noninv_serv_warehouse');
         await queryRunner.dropForeignKey('cnfrm_noninv_serv', 'FK_cnfrm_noninv_serv_service_master');

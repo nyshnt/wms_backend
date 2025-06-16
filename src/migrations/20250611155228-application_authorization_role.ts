@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uapplication_authorization_role20250611155228 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Application_Auth_Role',
@@ -46,15 +55,14 @@ export class Uapplication_authorization_role20250611155228 implements MigrationI
             true
         );
 
-        await queryRunner.createForeignKey('Application_Auth_Role',
-            new TableForeignKey({
-                columnNames: ['parent_role_id'],
-                referencedColumnNames: ['role_id'],
-                referencedTableName: 'Application_Auth_Role',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611155228-application_authorization_role.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Application_Auth_Role', 'FK_Application_Auth_Role_parent_role_id');

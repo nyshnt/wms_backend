@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uaddress_master_i18n20250613104352 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'address_master_i18n',
@@ -76,59 +85,29 @@ export class Uaddress_master_i18n20250613104352 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey(
-            'address_master_i18n',
-            new TableForeignKey({
-                columnNames: ['locale_id'],
-                referencedColumnNames: ['locale_id'],
-                referencedTableName: 'locale_master',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613104352-address_master_i18n.ts. You should create these foreign keys when making APIs.');
 
         // Note: The following foreign keys reference single columns in 'city_postal_state_i18n'.
         // If 'city_postal_state_i18n' has a composite primary key, ensure these columns are unique
         // or consider a composite foreign key if the relationship involves the full primary key.
-        await queryRunner.createForeignKey(
-            'address_master_i18n',
-            new TableForeignKey({
-                columnNames: ['city'],
-                referencedColumnNames: ['city'], // Assuming city is unique/primary in city_postal_state_i18n
-                referencedTableName: 'city_postal_state_i18n',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613104352-address_master_i18n.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'address_master_i18n',
-            new TableForeignKey({
-                columnNames: ['state_code'],
-                referencedColumnNames: ['state_code'], // Assuming state_code is unique/primary in city_postal_state_i18n
-                referencedTableName: 'city_postal_state_i18n',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613104352-address_master_i18n.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'address_master_i18n',
-            new TableForeignKey({
-                columnNames: ['postal_code'],
-                referencedColumnNames: ['postal_code'], // Assuming postal_code is unique/primary in city_postal_state_i18n
-                referencedTableName: 'city_postal_state_i18n',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613104352-address_master_i18n.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'address_master_i18n',
-            new TableForeignKey({
-                columnNames: ['country_name'],
-                referencedColumnNames: ['country_name'], // Assuming country_name is unique/primary in country_master_i18n
-                referencedTableName: 'country_master_i18n',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613104352-address_master_i18n.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('address_master_i18n', 'FK_address_master_i18n_locale_id');

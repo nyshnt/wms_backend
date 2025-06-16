@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uwarehouse_transportation_mode_unit_of_measure20250611132251 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'warehouse_transportation_mode_unit_of_measure',
@@ -30,33 +39,20 @@ export class Uwarehouse_transportation_mode_unit_of_measure20250611132251 implem
             true
         );
 
-        await queryRunner.createForeignKey('warehouse_transportation_mode_unit_of_measure',
-            new TableForeignKey({
-                columnNames: ['transportation_mode'],
-                referencedColumnNames: ['transportation_mode'],
-                referencedTableName: 'warehouse_transportation_mode',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611132251-warehouse_transportation_mode_unit_of_measure.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('warehouse_transportation_mode_unit_of_measure',
-            new TableForeignKey({
-                columnNames: ['unit_of_measure_code'],
-                referencedColumnNames: ['unit_of_measure_code'],
-                referencedTableName: 'warehouse_transportation_mode',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611132251-warehouse_transportation_mode_unit_of_measure.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('warehouse_transportation_mode_unit_of_measure',
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse_transportation_mode',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611132251-warehouse_transportation_mode_unit_of_measure.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('warehouse_transportation_mode_unit_of_measure', 'FK_warehouse_transportation_mode_unit_of_measure_transportation_mode');

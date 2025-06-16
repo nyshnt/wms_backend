@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uservice_instance_action20250613110356 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'serv_ins_action',
@@ -143,77 +152,33 @@ export class Uservice_instance_action20250613110356 implements MigrationInterfac
         );
 
         // Composite foreign key to ServiceInstance
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['serv_id', 'serv_ins_id'],
-                referencedColumnNames: ['service_id', 'service_instance_id'],
-                referencedTableName: 'service_instance',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
         // Composite foreign key to ServiceAction
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['serv_action_typ', 'serv_action_cod', 'segnum'],
-                referencedColumnNames: ['service_action_type', 'service_action_code', 'segment_number'],
-                referencedTableName: 'service_action',
-                onDelete: 'CASCADE' // Assuming CASCADE for primary key FKs
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['usr_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['hidnum'],
-                referencedColumnNames: ['hold_number'],
-                referencedTableName: 'hold_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['cnfrm_serv_id'],
-                referencedColumnNames: ['confirm_service_id'],
-                referencedTableName: 'confirm_service',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['wh_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'warehouse',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'serv_ins_action',
-            new TableForeignKey({
-                columnNames: ['ship_id'],
-                referencedColumnNames: ['shipment_id'],
-                referencedTableName: 'shipment_header',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250613110356-service_instance_action.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('serv_ins_action', 'FK_serv_ins_action_service_instance'); // Generic name for composite FK

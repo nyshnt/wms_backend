@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uconfirm_service_value20250610175817 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'Confirm_Service_Value',
@@ -54,34 +63,14 @@ export class Uconfirm_service_value20250610175817 implements MigrationInterface 
             true
         );
 
-        await queryRunner.createForeignKeys('Confirm_Service_Value', [
-            new TableForeignKey({
-                columnNames: ['service_instance_id'],
-                referencedColumnNames: ['service_instance_id'],
-                referencedTableName: 'service_instance',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['service_instance_id'],
-                referencedColumnNames: ['service_instance_id'],
-                referencedTableName: 'confirm_service_instance',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['confirm_service_id'],
-                referencedColumnNames: ['confirm_service_id'],
-                referencedTableName: 'confirm_service',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['confirm_service_id'],
-                referencedColumnNames: ['confirm_service_id'],
-                referencedTableName: 'confirm_non_inventory_service',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610175817-confirm_service_value.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('Confirm_Service_Value', 'FK_confirm_service_value_service_instance');
         await queryRunner.dropForeignKey('Confirm_Service_Value', 'FK_confirm_service_value_confirm_service_instance');

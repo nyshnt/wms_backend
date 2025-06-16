@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Uparcel_user_field20250612174129 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'parcel_user_field',
@@ -67,36 +76,20 @@ export class Uparcel_user_field20250612174129 implements MigrationInterface {
         );
 
         // Composite foreign key to CustomerMaster
-        await queryRunner.createForeignKey(
-            'parcel_user_field',
-            new TableForeignKey({
-                columnNames: ['client_id', 'customer_number'],
-                referencedColumnNames: ['client_id', 'customer_number'], // Assuming these form the composite primary key of customer_master
-                referencedTableName: 'customer_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612174129-parcel_user_field.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'parcel_user_field',
-            new TableForeignKey({
-                columnNames: ['insert_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612174129-parcel_user_field.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey(
-            'parcel_user_field',
-            new TableForeignKey({
-                columnNames: ['modification_user_id'],
-                referencedColumnNames: ['user_id'],
-                referencedTableName: 'user_master',
-                onDelete: 'SET NULL' // Assuming SET NULL for nullable foreign keys
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250612174129-parcel_user_field.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('parcel_user_field', 'FK_parcel_user_field_customer_master'); // Generic name for composite FK

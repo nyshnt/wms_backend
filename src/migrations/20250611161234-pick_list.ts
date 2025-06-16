@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upick_list20250611161234 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'pick_list',
@@ -82,21 +91,14 @@ export class Upick_list20250611161234 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKeys('pick_list', [
-            new TableForeignKey({
-                columnNames: ['pick_list_rule_id'],
-                referencedColumnNames: ['id'],
-                referencedTableName: 'pick_list_rule',
-                onDelete: 'CASCADE'
-            }),
-            new TableForeignKey({
-                columnNames: ['pick_list_rule_group_id'],
-                referencedColumnNames: ['id'],
-                referencedTableName: 'pick_list_rule_group',
-                onDelete: 'CASCADE'
-            })
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611161234-pick_list.ts. You should create these foreign keys when making APIs.');
     }
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('pick_list', 'FK_pick_list_pick_list_rule_id');

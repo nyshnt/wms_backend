@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Urf_terminal_master20250611103502 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'rf_terminal_master',
@@ -30,25 +39,17 @@ export class Urf_terminal_master20250611103502 implements MigrationInterface {
             true
         );
 
-        await queryRunner.createForeignKey('rf_terminal_master',
-            new TableForeignKey({
-                columnNames: ['RF_vendor_name'],
-                referencedColumnNames: ['RF_vendor_name'],
-                referencedTableName: 'rf_vendor_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611103502-rf_terminal_master.ts. You should create these foreign keys when making APIs.');
 
-        await queryRunner.createForeignKey('rf_terminal_master',
-            new TableForeignKey({
-                columnNames: ['device_code'],
-                referencedColumnNames: ['device_code'],
-                referencedTableName: 'device_master',
-                onDelete: 'CASCADE'
-            })
-        );
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250611103502-rf_terminal_master.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('rf_terminal_master', 'FK_rf_terminal_master_RF_vendor_master');
         await queryRunner.dropForeignKey('rf_terminal_master', 'FK_rf_terminal_master_device_master');

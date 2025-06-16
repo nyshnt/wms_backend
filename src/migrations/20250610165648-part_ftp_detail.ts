@@ -1,7 +1,16 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Upart_ftp_detail20250610165648 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Check if the table already exists
+        const tableName = this.constructor.name.replace(/^U/, '').replace(/\d+$/, '').toLowerCase();
+        const tableExists = await queryRunner.hasTable(tableName);
+        if (tableExists) {
+            console.log(`Table ${tableName} already exists, skipping creation`);
+            return;
+        }
+        
+        try {
         await queryRunner.createTable(
             new Table({
                 name: 'part_ftp_detail',
@@ -47,34 +56,14 @@ export class Upart_ftp_detail20250610165648 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKeys('part_ftp_detail', [
-            new TableForeignKey({
-                columnNames: ['part_number'],
-                referencedColumnNames: ['part_number'],
-                referencedTableName: 'part_ftp',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['part_client_id'],
-                referencedColumnNames: ['part_client_id'],
-                referencedTableName: 'part_ftp',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['warehouse_id'],
-                referencedColumnNames: ['warehouse_id'],
-                referencedTableName: 'part_ftp',
-                onDelete: 'CASCADE',
-            }),
-            new TableForeignKey({
-                columnNames: ['FTP_code'],
-                referencedColumnNames: ['FTP_code'],
-                referencedTableName: 'part_ftp',
-                onDelete: 'CASCADE',
-            }),
-        ]);
+        // Foreign key creation removed - will be added later when making APIs
+      console.log('Note: Foreign keys were not created for 20250610165648-part_ftp_detail.ts. You should create these foreign keys when making APIs.');
     }
-
+    catch (error) {
+        console.error('Error creating rf_terminal_master table:', error);
+        throw error;
+    }
+}
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropForeignKey('part_ftp_detail', 'FK_part_ftp_detail_part_number');
         await queryRunner.dropForeignKey('part_ftp_detail', 'FK_part_ftp_detail_part_client_id');
