@@ -10,7 +10,7 @@ export default () => ({
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: false,
         migrations: ['dist/migrations/*{.ts,.js}'],
-        migrationsRun: true,
+        migrationsRun: false,
     },
     jwt: {
         secret: process.env.JWT_SECRET,

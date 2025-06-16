@@ -48,13 +48,15 @@ async function runMigrations() {
     }
 }
 
-// Run migrations
-runMigrations()
-    .then(() => {
-        console.log('Migration process completed');
-        process.exit(0);
-    })
-    .catch((error) => {
-        console.error('Migration process failed:', error);
-        process.exit(1);
-    });
+// Only run migrations if this file is being executed directly
+if (require.main === module) {
+    runMigrations()
+        .then(() => {
+            console.log('Migration process completed');
+            process.exit(0);
+        })
+        .catch((error) => {
+            console.error('Migration process failed:', error);
+            process.exit(1);
+        });
+}
